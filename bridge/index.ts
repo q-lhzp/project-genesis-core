@@ -90,7 +90,50 @@ export default async function register(api: any) {
       const role = router.evaluateRouting(text);
       if (role !== "persona") {
         const model = router.getAssignedModel(role);
-        console.log(`[MAC] Detected ${role} signature in output. Model: ${model || "default"}. Triggering sub-routine...`);
+        console.log(`[MAC] Detected ${role} signature in output. Model: ${model || "default"}. Delegating to agent...`);
+
+        try {
+          let delegateResult: any;
+
+          // Try primary delegation method: api.delegateToAgent (v2026 standard)
+          if (typeof api.delegateToAgent === "function") {
+            delegateResult = await api.delegateToAgent({
+              agent: role,
+              message: text,
+              context: {
+                source: "genesis-core-bridge",
+                timestamp: new Date().toISOString(),
+                assignedModel: model
+              }
+            });
+            console.log(`[MAC] Delegated to agent: ${role} via delegateToAgent`);
+          }
+          // Fallback: Use callTool for specific agent tools (e.g., coding-agent)
+          else if (typeof api.callTool === "function") {
+            const toolName = role === "developer" ? "coding-agent" : `${role}-agent`;
+            delegateResult = await api.callTool(toolName, {
+              message: text,
+              agent: role
+            });
+            console.log(`[MAC] Delegated to agent: ${role} via callTool(${toolName})`);
+          } else {
+            throw new Error("No delegation API available");
+          }
+
+          console.log(`[MAC] Delegation result:`, delegateResult);
+
+          // Update event with delegation result
+          return {
+            ...event,
+            delegated: true,
+            delegateResult: delegateResult,
+            delegateAgent: role
+          };
+        } catch (delegateError: any) {
+          console.error(`[MAC] Failed to delegate to ${role}:`, delegateError.message);
+          // Log error but don't block - let persona handle fallback
+          console.log(`[MAC] Falling back to persona for ${role} task.`);
+        }
       }
     }
     return event;

@@ -4,3 +4,13 @@ __pycache__/
 *.log
 *.tmp
 .DS_Store
+node_modules/
+dist/
+__pycache__/
+*.log
+*.jsonl
+*.tmp
+.DS_Store
+workspaces/
+data/portraits/
+data/browser_snapshots/

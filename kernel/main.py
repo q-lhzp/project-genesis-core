@@ -7,6 +7,7 @@ from kernel.core.state_server import StateManager, StateRequestHandler
 from kernel.core.event_bus import bus
 from kernel.core.clock import clock
 from kernel.core.plugin_loader import PluginLoader
+from kernel.core.logger import logger
 
 class GenesisKernel:
     def __init__(self, base_dir):
@@ -29,29 +30,29 @@ class GenesisKernel:
         server = HTTPServer(("", port), StateRequestHandler)
         server.state_manager = self.state_manager
         server.plugin_manager = self.plugin_loader # Allow API to route to plugins
-        
-        print(f"--- GENESIS KERNEL API STARTING ON PORT {port} ---")
+
+        logger.info(f"GENESIS KERNEL API STARTING ON PORT {port}", data={"port": port})
         api_thread = threading.Thread(target=server.serve_forever, daemon=True)
         api_thread.start()
         return server
 
     async def run(self):
         """Main asynchronous execution loop."""
-        print("--- PROJECT GENESIS CORE KERNEL STARTING ---")
-        
+        logger.info("PROJECT GENESIS CORE KERNEL STARTING")
+
         # 1. Discover and load plugins
         self.plugin_loader.discover_and_load()
-        
+
         # 2. Start API Server
         self.start_api_server()
-        
+
         # 3. Start Event Processing & Clock
         tasks = [
             asyncio.create_task(self.event_bus.start_processing()),
             asyncio.create_task(self.clock.start())
         ]
-        
-        print("--- KERNEL FULLY OPERATIONAL ---")
+
+        logger.info("KERNEL FULLY OPERATIONAL")
         await asyncio.gather(*tasks)
 
 if __name__ == "__main__":
@@ -65,4 +66,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(kernel.run())
     except KeyboardInterrupt:
-        print("\n--- KERNEL SHUTTING DOWN ---")
+        logger.info("KERNEL SHUTTING DOWN")

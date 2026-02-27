@@ -98,7 +98,7 @@ export class MACRouter {
    * Get current role assignments
    */
   getRoleAssignments(): Record<AgentRole, string> {
-    return Object.fromEntries(this.roleAssignments);
+    return Object.fromEntries(this.roleAssignments) as Record<AgentRole, string>;
   }
 
   /**
