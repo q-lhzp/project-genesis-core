@@ -1,0 +1,18 @@
+[
+	{
+		"agent": "Developer",
+		"model": "MiniMax-M2.5"
+	},
+	{
+		"agent": "Persona",
+		"model": "xai/grok-4-1-fast",
+	},
+	{
+		"agent": "Analyst",
+		"model": "MiniMax-M2.5"
+	},
+	{
+		"agent": "Limbic",
+		"model": "xai/grok-4-1-fast-non-reasoning"
+	}
+]

@@ -93,6 +93,12 @@ class StateRequestHandler(BaseHTTPRequestHandler):
             self._send_json(manifests)
         elif path == "/v1/health":
             self._send_json({"status": "running", "version": "0.1.0"})
+
+        # 3. Plugin API Routes
+        elif len(parts) >= 4 and parts[0] == "v1" and parts[1] == "plugins":
+            plugin_id = parts[2]
+            route = "/".join(parts[3:]) if len(parts) > 3 else ""
+            self._handle_plugin_route(plugin_id, "GET", route)
         else:
             self.send_error(404)
 
@@ -130,7 +136,16 @@ class StateRequestHandler(BaseHTTPRequestHandler):
         self._handle_write(merge=True)
 
     def do_POST(self):
-        self._handle_write(merge=False)
+        parsed_path = urlparse(self.path)
+        parts = parsed_path.path.strip("/").split("/")
+
+        # Check for plugin POST routes
+        if len(parts) >= 4 and parts[0] == "v1" and parts[1] == "plugins":
+            plugin_id = parts[2]
+            route = "/".join(parts[3:]) if len(parts) > 3 else ""
+            self._handle_plugin_route(plugin_id, "POST", route)
+        else:
+            self._handle_write(merge=False)
 
     def _handle_write(self, merge):
         parsed_path = urlparse(self.path)
@@ -156,6 +171,56 @@ class StateRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         self.wfile.write(json.dumps(data).encode('utf-8'))
+
+    def _handle_plugin_route(self, plugin_id, method, route):
+        """Handle plugin API routes from manifest."""
+        if not hasattr(self.server, 'plugin_manager'):
+            self.send_error(500, "No plugin manager")
+            return
+
+        plugin = self.server.plugin_manager.get_plugin_by_id(plugin_id)
+        if not plugin:
+            self.send_error(404, f"Plugin {plugin_id} not found")
+            return
+
+        manifest = plugin["manifest"]
+        module = plugin["module"]
+
+        if not module:
+            self.send_error(500, f"Plugin {plugin_id} has no backend module")
+            return
+
+        # Find matching route in manifest
+        api_routes = manifest.get("api_routes", {})
+        full_route = f"{method} /v1/plugins/{plugin_id}/{route}"
+
+        handler_name = None
+        for route_pattern, handler in api_routes.items():
+            if route_pattern == full_route or (method in route_pattern and route in route_pattern):
+                handler_name = handler
+                break
+
+        if not handler_name:
+            # Try shorter match
+            for route_pattern, handler in api_routes.items():
+                if route_pattern.startswith(method) and route_pattern.endswith(route):
+                    handler_name = handler
+                    break
+
+        if not handler_name:
+            self.send_error(404, f"No handler for {full_route}")
+            return
+
+        # Call the handler
+        try:
+            handler = getattr(module, handler_name, None)
+            if handler and callable(handler):
+                result = handler()
+                self._send_json(result)
+            else:
+                self.send_error(500, f"Handler {handler_name} not callable")
+        except Exception as e:
+            self._send_json({"error": str(e)}, status=500)
 
 def run_server(port=5000, data_dir="data"):
     state_manager = StateManager(data_dir)

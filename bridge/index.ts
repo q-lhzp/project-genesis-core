@@ -1,20 +1,21 @@
 /**
- * Project Genesis Core Bridge - OpenClaw Plugin (v0.1.0)
+ * Project Genesis Core Bridge - OpenClaw Plugin (v2026.1.0)
  * Connects the Gateway to the Genesis OS Kernel.
+ * Follows OpenClaw v2026 multi-agent standards.
  */
 
 import { Type } from "@sinclair/typebox";
-import { MACRouter } from "./mac_router.js";
+import { MACRouter, AgentRole } from "./mac_router.js";
 
 export default async function register(api: any) {
   const config = api.config.plugins?.entries?.["project-genesis-core-bridge"] || {};
   const KERNEL_URL = config.kernelUrl || "http://localhost:5000";
-  
+
   const router = new MACRouter();
-  
+
   console.log("--- GENESIS CORE BRIDGE STARTING ---");
   console.log(`[BRIDGE] Connecting to Kernel at: ${KERNEL_URL}`);
-  
+
   await router.init(KERNEL_URL);
 
   /**
@@ -81,16 +82,54 @@ export default async function register(api: any) {
   /**
    * 4. Hook: LLM Output
    * Analyze the output and determine if a sub-agent needs to spin up a background task.
+   * Supports: Persona, Limbic, Analyst, Developer (v2026 standard)
    */
   api.registerHook("llm_output", async (event: any) => {
     const text = event.content || "";
     if (text) {
       const role = router.evaluateRouting(text);
       if (role !== "persona") {
-        console.log(`[MAC] Detected ${role} signature in output. Triggering sub-routine...`);
+        const model = router.getAssignedModel(role);
+        console.log(`[MAC] Detected ${role} signature in output. Model: ${model || "default"}. Triggering sub-routine...`);
       }
     }
     return event;
+  });
+
+  /**
+   * 5. Register Tool: Get MAC Status
+   * Returns current role assignments and available models.
+   */
+  api.registerTool({
+    name: "mac_status",
+    description: "Get the current Multi-Agent Cluster status and role assignments.",
+    execute: async () => {
+      const assignments = router.getRoleAssignments();
+      return {
+        text: `MAC Status:\n${JSON.stringify(assignments, null, 2)}`
+      };
+    }
+  });
+
+  /**
+   * 6. Register Tool: Set Role Model
+   * Dynamically update which model handles a specific role.
+   */
+  api.registerTool({
+    name: "mac_set_role_model",
+    description: "Assign a specific model to a MAC role.",
+    params: Type.Object({
+      role: Type.String({ description: "Role to update (persona|limbic|analyst|developer)" }),
+      model: Type.String({ description: "Model key to assign" })
+    }),
+    execute: async ({ role, model }: { role: string, model: string }) => {
+      const validRoles = ["persona", "limbic", "analyst", "developer"];
+      if (!validRoles.includes(role)) {
+        return { text: `Invalid role. Valid roles: ${validRoles.join(", ")}` };
+      }
+      router.setRoleAssignment(role as AgentRole, model);
+      return { text: `Updated ${role} to use model: ${model}` };
+    }
   });
 
   console.log("--- GENESIS CORE BRIDGE FULLY INITIALIZED ---");

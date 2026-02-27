@@ -1,9 +1,9 @@
 {
   "mac_assignments": {
-    "persona": "",
-    "analyst": "",
-    "developer": "",
-    "limbic": ""
+    "persona": "xai/grok-4-1-fast",
+    "analyst": "minimax/MiniMax-M2.5",
+    "developer": "minimax/MiniMax-M2.5",
+    "limbic": "xai/grok-4-1-fast-non-reasoning"
   },
   "api_key": "",
   "key_anthropic": "",
