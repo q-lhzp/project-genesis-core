@@ -1,0 +1,13 @@
+{
+  "mode": "paper",
+  "api_provider": "alpaca",
+  "api_key": "",
+  "api_secret": "",
+  "balances": {
+    "USD": 10000
+  },
+  "positions": {},
+  "transactions": [],
+  "total_deposited": 10000.0,
+  "last_updated": "2026-02-26T00:00:00.000Z"
+}

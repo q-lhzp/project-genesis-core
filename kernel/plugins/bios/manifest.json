@@ -1,0 +1,18 @@
+{
+  "id": "bios-engine",
+  "name": "Bios Simulation",
+  "version": "1.0.0",
+  "api_routes": {
+    "GET /v1/plugins/bios/needs": "handle_needs",
+    "POST /v1/plugins/bios/action": "handle_action"
+  },
+  "ui": {
+    "tab_id": "bios",
+    "icon": "🧬",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["TICK_MINUTELY"],
+    "publishes": ["EVENT_NEED_CRITICAL", "EVENT_CYCLE_PHASE_CHANGE"]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "identity-engine",
+  "name": "Identity & Evolution",
+  "version": "1.0.0",
+  "capabilities": ["identity", "evolution", "reflection"],
+  "api_routes": {
+    "GET /v1/plugins/identity/soul": "handle_get_soul",
+    "GET /v1/plugins/identity/proposals": "handle_get_proposals",
+    "POST /v1/plugins/identity/pipeline/run": "handle_run_pipeline"
+  },
+  "ui": {
+    "tab_id": "identity",
+    "icon": "📜",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["TICK_HOURLY", "ENTITY_WAKEUP"],
+    "publishes": ["EVENT_SOUL_UPDATED", "EVENT_REFLECTION_COMPLETE"]
+  }
+}

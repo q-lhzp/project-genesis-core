@@ -1,0 +1,46 @@
+{
+  "sync_to_real_world": true,
+  "last_update": "2026-02-26T00:03:56.732262",
+  "initialized": true,
+  "location": {
+    "city": "Berlin",
+    "latitude": 52.52,
+    "longitude": 13.405,
+    "timezone": "Europe/Berlin"
+  },
+  "weather": {
+    "temperature": 13,
+    "feels_like": 13.3,
+    "condition": "clear",
+    "humidity": 48,
+    "wind_speed": 3.3,
+    "pressure": 1004.9730534238404,
+    "visibility": 10000,
+    "uv_index": 8,
+    "last_updated": "2026-02-27T08:18:42.363278"
+  },
+  "lighting": {
+    "sunrise": "07:47",
+    "sunset": "18:12",
+    "daylight_minutes": 625,
+    "is_daytime": true,
+    "golden_hour_morning": true,
+    "golden_hour_evening": false,
+    "moon_phase": "waxing_gibbous",
+    "moon_illumination": 20
+  },
+  "atmosphere": {
+    "fog_density": 0.0,
+    "cloud_cover": 17,
+    "precipitation_chance": 0,
+    "air_quality_index": 33
+  },
+  "forecast": {
+    "today_high": 20,
+    "today_low": 12,
+    "tomorrow_high": 18,
+    "tomorrow_low": 10
+  },
+  "season": "winter",
+  "world_time": "2026-02-27T08:18:42.363704"
+}

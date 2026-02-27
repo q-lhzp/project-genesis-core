@@ -1,0 +1,22 @@
+{
+  "id": "world-engine",
+  "name": "World Engine",
+  "version": "1.0.0",
+  "author": "Genesis-Core-Architect",
+  "capabilities": ["weather", "atmosphere", "time-sync", "lighting"],
+  "api_routes": {
+    "GET /v1/plugins/world/state": "handle_get_state",
+    "GET /v1/plugins/world/weather": "handle_get_weather",
+    "GET /v1/plugins/world/lighting": "handle_get_lighting",
+    "POST /v1/plugins/world/location": "handle_set_location"
+  },
+  "ui": {
+    "tab_id": "world",
+    "icon": "🌍",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["TICK_HOURLY", "TICK_MINUTELY"],
+    "publishes": ["EVENT_WEATHER_UPDATE", "EVENT_LIGHTING_CHANGE"]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "developer-engine",
+  "name": "Self-Expansion Engine",
+  "version": "1.0.0",
+  "capabilities": ["coding", "system-update", "tool-creation"],
+  "api_routes": {
+    "POST /v1/plugins/developer/propose-code": "handle_propose_code",
+    "GET /v1/plugins/developer/projects": "handle_list_projects"
+  },
+  "ui": {
+    "tab_id": "developer",
+    "icon": "💻",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["EVENT_SOUL_UPDATED"],
+    "publishes": ["EVENT_SYSTEM_UPGRADE_READY"]
+  }
+}

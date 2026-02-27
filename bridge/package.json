@@ -1,0 +1,29 @@
+{
+  "name": "project-genesis-core-bridge",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "OpenClaw Bridge for the Genesis Core OS.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "compiled": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "0.34.48"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.1.26"
+  },
+  "devDependencies": {
+    "openclaw": "*",
+    "typescript": "^5.9.3"
+  }
+}

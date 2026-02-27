@@ -1,0 +1,19 @@
+{
+  "id": "desktop-engine",
+  "name": "Desktop Sovereignty",
+  "version": "1.0.0",
+  "capabilities": ["wallpaper", "themes", "system-control"],
+  "api_routes": {
+    "POST /v1/plugins/desktop/wallpaper": "handle_set_wallpaper",
+    "POST /v1/plugins/desktop/theme": "handle_set_theme"
+  },
+  "ui": {
+    "tab_id": "desktop",
+    "icon": "🖥️",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["EVENT_WEATHER_UPDATE", "EVENT_LOCATION_CHANGE"],
+    "publishes": ["EVENT_WALLPAPER_CHANGED"]
+  }
+}

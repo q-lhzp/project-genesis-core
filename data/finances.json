@@ -1,0 +1,10 @@
+{
+  "balance": 1000,
+  "currency": "Credits",
+  "income_sources": [],
+  "expenses_recurring": [],
+  "debts": [],
+  "last_expense_process": "2026-02-26T00:00:00.000Z",
+  "last_income_process": "2026-02-26T00:00:00.000Z",
+  "net_worth": 1000
+}

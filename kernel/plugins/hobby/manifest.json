@@ -1,0 +1,19 @@
+{
+  "id": "hobby-engine",
+  "name": "Hobby & Research",
+  "version": "1.0.0",
+  "capabilities": ["interests", "research", "browsing"],
+  "api_routes": {
+    "GET /v1/plugins/hobby/interests": "handle_get_interests",
+    "POST /v1/plugins/hobby/add": "handle_add_interest"
+  },
+  "ui": {
+    "tab_id": "hobby",
+    "icon": "🎨",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["TICK_HOURLY"],
+    "publishes": ["EVENT_NEW_INTEREST_FOUND", "EVENT_RESEARCH_COMPLETE"]
+  }
+}

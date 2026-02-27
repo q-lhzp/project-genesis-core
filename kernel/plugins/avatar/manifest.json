@@ -1,0 +1,19 @@
+{
+  "id": "avatar-engine",
+  "name": "Embodiment Engine",
+  "version": "1.0.0",
+  "api_routes": {
+    "GET /v1/plugins/avatar/config": "handle_config",
+    "POST /v1/plugins/avatar/pose": "handle_pose"
+  },
+  "ui": {
+    "tab_id": "avatar",
+    "icon": "🎭",
+    "entry": "view.js",
+    "is_module": true
+  },
+  "events": {
+    "subscribes": ["TICK_MINUTELY", "EVENT_NEED_CRITICAL"],
+    "publishes": ["EVENT_AVATAR_BLINK", "EVENT_EMOTION_TRIGGERED"]
+  }
+}

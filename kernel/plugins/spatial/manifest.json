@@ -1,0 +1,21 @@
+{
+  "id": "spatial-engine",
+  "name": "Spatial & Items",
+  "version": "1.0.0",
+  "capabilities": ["interior", "inventory", "wardrobe"],
+  "api_routes": {
+    "GET /v1/plugins/spatial/interior": "handle_get_interior",
+    "GET /v1/plugins/spatial/inventory": "handle_get_inventory",
+    "GET /v1/plugins/spatial/wardrobe": "handle_get_wardrobe",
+    "POST /v1/plugins/spatial/update": "handle_update_component"
+  },
+  "ui": {
+    "tab_id": "spatial",
+    "icon": "🏠",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["ENTITY_MOVE", "ENTITY_DRESS"],
+    "publishes": ["EVENT_LOCATION_CHANGE", "EVENT_OUTFIT_CHANGE"]
+  }
+}

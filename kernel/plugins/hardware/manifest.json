@@ -1,0 +1,18 @@
+{
+  "id": "hardware-engine",
+  "name": "Hardware Resonance",
+  "version": "1.0.0",
+  "capabilities": ["monitoring", "system-resonance"],
+  "api_routes": {
+    "GET /v1/plugins/hardware/stats": "handle_get_stats"
+  },
+  "ui": {
+    "tab_id": "hardware",
+    "icon": "⚡",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["TICK_MINUTELY"],
+    "publishes": ["EVENT_HARDWARE_STRESS", "EVENT_RESOURCES_UPDATE"]
+  }
+}

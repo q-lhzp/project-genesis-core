@@ -1,0 +1,18 @@
+{
+  "id": "vault-engine",
+  "name": "The Vault",
+  "version": "1.0.0",
+  "api_routes": {
+    "GET /v1/plugins/vault/status": "handle_status",
+    "POST /v1/plugins/vault/trade": "handle_trade"
+  },
+  "ui": {
+    "tab_id": "vault",
+    "icon": "💰",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["TICK_HOURLY"],
+    "publishes": ["EVENT_TRADE_EXECUTED", "EVENT_ASSET_ALERT"]
+  }
+}

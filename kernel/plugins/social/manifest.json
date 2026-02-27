@@ -1,0 +1,20 @@
+{
+  "id": "social-engine",
+  "name": "Social Intelligence",
+  "version": "1.0.0",
+  "capabilities": ["crm", "reputation", "feed"],
+  "api_routes": {
+    "GET /v1/plugins/social/entities": "handle_list_entities",
+    "POST /v1/plugins/social/add": "handle_add_entity",
+    "GET /v1/plugins/social/feed": "handle_get_feed"
+  },
+  "ui": {
+    "tab_id": "social",
+    "icon": "🤝",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["TICK_HOURLY", "EVENT_TRADE_EXECUTED"],
+    "publishes": ["EVENT_REPUTATION_CHANGE", "EVENT_SOCIAL_POST"]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "version": "5.1.0",
+  "last_updated": "2026-02-26T13:58:36.206890",
+  "character": {
+    "name": "Seraphina"
+  },
+  "metabolism": {
+    "hunger_rate": 0.5,
+    "thirst_rate": 0.5,
+    "energy_rate": 0.8,
+    "stress_accumulation": 0.3
+  },
+  "hardware_resonance": {
+    "enabled": true,
+    "cpu_threshold_high": 80,
+    "memory_threshold_high": 85,
+    "temp_threshold_high": 80,
+    "audio_sensitivity": 0.5
+  },
+  "social": {
+    "autonomous_posting": true,
+    "post_frequency": "medium",
+    "npc_interactions": true,
+    "interaction_frequency": "medium"
+  },
+  "connectivity": {
+    "vmc_enabled": false,
+    "osc_enabled": false,
+    "vmc_ip": "",
+    "vmc_port": null
+  },
+  "economy": {
+    "paper_trading": true,
+    "risk_tolerance": "moderate",
+    "max_position_size": 0.2
+  },
+  "modules": {
+    "eros": false,
+    "cycle": false,
+    "dreams": false,
+    "hobbies": false,
+    "utility": true,
+    "economy": true,
+    "social": true,
+    "psychology": true,
+    "skills": true,
+    "world": true,
+    "reputation": true,
+    "desktop": false,
+    "genesis": false
+  }
+}

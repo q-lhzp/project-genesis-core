@@ -1,0 +1,47 @@
+{
+  "locations": [
+    {
+      "id": "home_bedroom",
+      "name": "Bedroom",
+      "type": "indoor",
+      "address": "Home"
+    },
+    {
+      "id": "home_living",
+      "name": "Living Room",
+      "type": "indoor",
+      "address": "Home"
+    },
+    {
+      "id": "home_kitchen",
+      "name": "Kitchen",
+      "type": "indoor",
+      "address": "Home"
+    },
+    {
+      "id": "city_park",
+      "name": "City Park",
+      "type": "outdoor",
+      "address": "Central Park"
+    },
+    {
+      "id": "city_cafe",
+      "name": "Cafe",
+      "type": "indoor",
+      "address": "Main Street"
+    },
+    {
+      "id": "gym",
+      "name": "Gym",
+      "type": "indoor",
+      "address": "Fitness Center"
+    },
+    {
+      "id": "work",
+      "name": "Office",
+      "type": "indoor",
+      "address": "Tech Hub"
+    }
+  ],
+  "current_time": "2026-02-25T23:10:26.835Z"
+}

@@ -1,0 +1,7 @@
+{
+  "biological_age_days": 10000,
+  "life_stage": "adult",
+  "is_asleep": false,
+  "is_napping": false,
+  "sleep_start": null
+}

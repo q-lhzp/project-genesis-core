@@ -1,0 +1,23 @@
+{
+  "name": "Project Genesis Core Bridge",
+  "id": "project-genesis-core-bridge",
+  "version": "0.1.0",
+  "description": "OpenClaw Bridge for the Genesis Core OS. Connects to the local Kernel.",
+  "main": "dist/index.js",
+  "entry": "index.ts",
+  "author": "Genesis Core Team",
+  "openclaw": {
+    "extensions": ["index.ts"],
+    "hooks": ["before_prompt_build", "llm_output"]
+  },
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "kernelUrl": {
+        "type": "string",
+        "default": "http://localhost:5000",
+        "description": "The URL of the Genesis Core Kernel REST API."
+      }
+    }
+  }
+}

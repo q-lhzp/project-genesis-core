@@ -1,0 +1,35 @@
+{
+  "tops": [
+    {
+      "id": "casual_tshirt",
+      "name": "Casual T-Shirt",
+      "category": "tops",
+      "color": "blue",
+      "comfort": 10
+    }
+  ],
+  "bottoms": [
+    {
+      "id": "casual_jeans",
+      "name": "Jeans",
+      "category": "bottoms",
+      "color": "blue",
+      "comfort": 8
+    }
+  ],
+  "shoes": [
+    {
+      "id": "sneakers",
+      "name": "Sneakers",
+      "category": "shoes",
+      "color": "white",
+      "comfort": 7
+    }
+  ],
+  "accessories": [],
+  "current_outfit": [
+    "casual_tshirt",
+    "casual_jeans",
+    "sneakers"
+  ]
+}
