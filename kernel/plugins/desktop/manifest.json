@@ -1,5 +1,5 @@
 {
-  "id": "desktop-engine",
+  "id": "desktop",
   "name": "Desktop Sovereignty",
   "version": "1.0.0",
   "capabilities": ["wallpaper", "themes", "system-control"],
