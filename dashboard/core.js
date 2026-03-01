@@ -199,6 +199,21 @@ async function loadDefaultView() {
             feedEl.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-dim); font-style: italic;">No visual memories captured.</div>';
         }
     }
+
+    // Load Proposals (Dashboard)
+    const proposalsEl = document.getElementById('proposals-content');
+    if (proposalsEl && idProps.pending) {
+        if (idProps.pending.length > 0) {
+            proposalsEl.innerHTML = idProps.pending.map(p => `
+                <div style="background: #0a0a0f; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 0.5rem;">
+                    <div style="font-size: 0.6rem; color: #7c6ff0; text-transform: uppercase; margin-bottom: 0.2rem;">${p.change_type}</div>
+                    <div style="font-size: 0.75rem; color: #eeeef4;">${p.summary}</div>
+                </div>
+            `).join('');
+        } else {
+            proposalsEl.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-dim); font-style: italic; text-align: center; padding-top: 2rem;">No pending evolution proposals.</div>';
+        }
+    }
   } catch (e) {
     console.error("Default view load error:", e);
   }

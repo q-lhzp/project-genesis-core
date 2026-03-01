@@ -440,7 +440,7 @@
 
       <div id="default-view" class="plugin-view active">
         <div class="main-grid">
-          <!-- Left Column -->
+          <!-- Left Column: Soul Map -->
           <div class="panel-card" id="soul-map-container"
             style="min-height: 600px; padding: 0; position: relative; overflow: hidden;">
             <div style="position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;">
@@ -463,35 +463,41 @@
             </div>
           </div>
 
-          <!-- Center Column -->
+          <!-- Center Column: Vitals & Hardware -->
           <div class="right-panel">
-            <div class="panel-card" id="timeline-container" style="min-height: 250px;">
+            <div class="panel-card" id="vitals-container" style="min-height: 300px; border-left: 4px solid var(--accent);">
+              <h2>Vitals Dashboard</h2>
+              <div id="vitals-content"
+                style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Connecting to
+                Bios...</div>
+            </div>
+            <div class="panel-card" id="hardware-container" style="min-height: 200px; border-left: 4px solid #8b5cf6;">
+              <h2>Hardware Resonance</h2>
+              <div id="hardware-content"
+                style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Scanning
+                Hardware...</div>
+            </div>
+            <div class="panel-card" id="proposals-container" style="min-height: 200px; border-left: 4px solid var(--growth);">
+              <h2>Pending Proposals</h2>
+              <div id="proposals-content"
+                style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Loading
+                Proposals...</div>
+            </div>
+          </div>
+
+          <!-- Right Column: Evolution & Feed -->
+          <div class="right-panel">
+            <div class="panel-card" id="timeline-container" style="min-height: 300px;">
               <h2>Evolution Timeline</h2>
               <div id="timeline-content"
                 style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Loading
                 History...</div>
             </div>
             <div class="panel-card" id="feed-container" style="min-height: 330px;">
-              <h2>Life Stream</h2>
+              <h2>Experience Feed</h2>
               <div id="feed-content"
                 style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Loading
                 Stream...</div>
-            </div>
-          </div>
-
-          <!-- Right Column -->
-          <div class="right-panel">
-            <div class="panel-card" id="vitals-container" style="min-height: 300px;">
-              <h2>Vitals Dashboard</h2>
-              <div id="vitals-content"
-                style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Connecting to
-                Bios...</div>
-            </div>
-            <div class="panel-card" id="hardware-container" style="min-height: 280px;">
-              <h2>Hardware Resonance</h2>
-              <div id="hardware-content"
-                style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Scanning
-                Hardware...</div>
             </div>
           </div>
         </div>
