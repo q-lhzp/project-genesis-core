@@ -1,0 +1,19 @@
+{
+  "projects": [
+    {
+      "id": "proj_001",
+      "name": "Neural Bridge v2",
+      "description": "Upgrading the OpenClaw communication layer.",
+      "status": "completed",
+      "type": "tool"
+    },
+    {
+      "id": "proj_002",
+      "name": "Visual Sovereignty",
+      "description": "Implementing Face-ID consistency.",
+      "status": "implementing",
+      "type": "script"
+    }
+  ],
+  "last_brainstorm": "2026-03-01T11:30:38.382632"
+}

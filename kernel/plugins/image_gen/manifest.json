@@ -2,10 +2,14 @@
   "id": "image_gen",
   "name": "Image Generator",
   "version": "1.0.0",
-  "capabilities": ["image-generation", "face-id", "visual-sovereignty"],
+  "capabilities": [
+    "image-generation",
+    "face-id",
+    "visual-sovereignty"
+  ],
   "api_routes": {
-    "POST /v1/plugins/image_gen/generate": "handle_generate_image",
-    "GET /v1/plugins/image_gen/faceid_config": "handle_get_faceid_config"
+    "POST /v1/plugins/image_gen/generate": "handle_generate",
+    "GET /v1/plugins/image_gen/gallery": "handle_get_gallery"
   },
   "ui": {
     "tab_id": "image-gen",
@@ -14,6 +18,8 @@
   },
   "events": {
     "subscribes": [],
-    "publishes": ["EVENT_IMAGE_GENERATED"]
+    "publishes": [
+      "EVENT_IMAGE_GENERATED"
+    ]
   }
 }

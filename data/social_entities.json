@@ -1,0 +1,18 @@
+[
+  {
+    "id": "leo",
+    "name": "Leo",
+    "bond": 100,
+    "trust": 100,
+    "intimacy": 80,
+    "type": "human"
+  },
+  {
+    "id": "dr_k",
+    "name": "Dr. K",
+    "bond": 20,
+    "trust": 50,
+    "intimacy": 10,
+    "type": "npc"
+  }
+]

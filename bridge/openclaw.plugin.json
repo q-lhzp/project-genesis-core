@@ -1,7 +1,7 @@
 {
-  "name": "Genesis OS Bridge",
-  "id": "genesis-os-bridge",
-  "version": "0.2.2",
+  "name": "Genesis OS Bridge v7",
+  "id": "genesis-os-bridge-v7",
+  "version": "0.7.0",
   "description": "OpenClaw Bridge for the Genesis Core OS. Connects to the local Kernel.",
   "main": "dist/index.js",
   "entry": "index.ts",

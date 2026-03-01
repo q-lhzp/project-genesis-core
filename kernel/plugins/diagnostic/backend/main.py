@@ -74,4 +74,5 @@ plugin = DiagnosticPlugin()
 
 def initialize(kernel): plugin.initialize(kernel)
 def handle_health(): return plugin.handle_health()
+def handle_logs(data=None): return plugin.handle_logs(data)
 def handle_verify(): return plugin.handle_verify()

@@ -10,20 +10,22 @@
 
     :root {
       --bg: #0a0a0f;
-      --bg-card: #12121a;
-      --bg-hover: rgba(124, 111, 240, 0.05);
-      --border: #1e1e30;
+      --bg-card: rgba(12, 12, 20, 0.85);
+      --bg-hover: rgba(124, 111, 240, 0.1);
+      --border: rgba(30, 30, 48, 0.6);
       --text: #c8c8d8;
       --text-dim: #6a6a80;
       --text-bright: #eeeef4;
       --accent: #7c6ff0;
-      --accent-glow: rgba(124, 111, 240, 0.3);
+      --accent-glow: rgba(124, 111, 240, 0.4);
       --growth: #50c878;
       --core: #e05050;
-      --glass: blur(10px);
+      --mutable: #50b8e0;
+      --glass: blur(12px);
       --radius: 12px;
+      --radius-lg: 40px;
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      --gutter: 20px;
+      --gutter: 1.5rem;
     }
 
     * {
@@ -61,9 +63,10 @@
     .sidebar {
       width: 260px;
       flex-shrink: 0;
-      background: var(--bg-card);
+      background: #0a0a0f;
       border-right: 1px solid var(--border);
-      padding: 1.5rem 0rem;
+      padding: 22.5px 0;
+      /* Vertical padding only, horiz handled by children */
       display: flex;
       flex-direction: column;
       position: sticky;
@@ -74,17 +77,20 @@
     }
 
     .sidebar-header {
-      padding: 0 1.5rem 2rem;
+      padding: 0 0 30px;
       border-bottom: 1px solid var(--border);
       text-align: left;
     }
 
     .sidebar-header h2 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.9rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 13.5px !important;
+      color: var(--accent) !important;
+      letter-spacing: 1.35px !important;
+      text-transform: uppercase !important;
+      font-weight: 700 !important;
+      padding-left: 15px !important;
+      margin: 0 !important;
     }
 
     #kernel-status {
@@ -105,34 +111,33 @@
     }
 
     .tab-btn {
-      padding: 0.8rem 1.5rem;
+      padding: 12px 15px;
       background: none;
       border: none;
-      border-left: 3px solid transparent;
       color: var(--text-dim);
       text-align: left;
       cursor: pointer;
-      border-radius: 0 4px 4px 0;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
+      display: block;
+      width: 100%;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 11.25px;
       font-weight: 500;
       transition: all 0.25s;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.5625px;
       text-transform: uppercase;
+      border-radius: 0 4px 4px 0;
+      border-left: 3px solid transparent;
     }
 
     .tab-btn:hover {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-bright);
+      background: rgba(255, 255, 255, 0.02);
     }
 
     .tab-btn.active {
       color: var(--accent);
-      border-left-color: var(--accent);
-      background: rgba(126, 116, 241, 0.08);
+      background: rgba(124, 111, 240, 0.08);
+      border-left: 3px solid var(--accent);
     }
 
     .tab-icon {
@@ -155,26 +160,121 @@
     }
 
     .stats-bar {
-      display: flex; justify-content: center; gap: 3rem;
-      margin-top: 1.5rem; flex-wrap: wrap;
-    }
-
-    .stat-item {
-      text-align: center;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      gap: 2.5rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
     }
 
-    .stat-label {
-      font-size: 0.65rem; color: var(--text-dim);
-      text-transform: uppercase; letter-spacing: 0.1em;
-      margin-bottom: 0.2rem;
+    .stat {
+      text-align: center;
     }
 
-    .stat-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.4rem; font-weight: 700;
+    .stat .num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
       color: var(--text-bright);
+    }
+
+    .stat .label {
+      font-size: 10.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.4rem;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding: 0 4rem;
+    }
+
+    .pulse {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-right: 8px;
+      box-shadow: 0 0 8px var(--accent-glow);
+      animation: pulse-legacy 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-legacy {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.15);
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      padding: 0.8rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.7rem;
+      max-width: 1000px;
+      margin: 1.5rem auto 0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-dim);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .growth-bar {
+      margin: 1.5rem auto;
+      max-width: 1000px;
+      padding: 0.8rem 1.2rem;
+      background: rgba(80, 200, 120, 0.05);
+      border: 1px solid rgba(80, 200, 120, 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .growth-bar:hover {
+      background: rgba(80, 200, 120, 0.1);
+      border-color: var(--growth);
+    }
+
+    .growth-label {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: var(--growth);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
     }
 
     .news-ticker {
@@ -197,8 +297,13 @@
     }
 
     @keyframes ticker {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
     }
 
     .ticker-item {
@@ -221,8 +326,12 @@
 
     .header::before {
       content: '';
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 300px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 300px;
       background: radial-gradient(ellipse, var(--accent-glow), transparent 70%);
       pointer-events: none;
     }
@@ -236,8 +345,13 @@
       position: relative;
     }
 
-    .header h1 .evolution { color: var(--accent); }
-    .header h1 .soul { color: var(--text-dim); }
+    .header h1 .evolution {
+      color: var(--accent);
+    }
+
+    .header h1 .soul {
+      color: var(--text-dim);
+    }
 
     .header .subtitle {
       font-size: 0.85rem;
@@ -247,8 +361,13 @@
       letter-spacing: 0.05em;
     }
 
-    .header .subtitle .evolution { color: var(--accent); }
-    .header .subtitle .soul { color: var(--text-dim); }
+    .header .subtitle .evolution {
+      color: var(--accent);
+    }
+
+    .header .subtitle .soul {
+      color: var(--text-dim);
+    }
 
     .plugin-view {
       display: none;
@@ -263,8 +382,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .main-grid {
@@ -274,7 +400,9 @@
     }
 
     @media (max-width: 1200px) {
-      .main-grid { grid-template-columns: 1fr; }
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .right-panel {
@@ -396,7 +524,7 @@
 
   <div class="sidebar">
     <div class="sidebar-header">
-      <h2><span class="evolution">Genesis</span> <span class="soul">Core</span></h2>
+      <h2>Navigation</h2>
       <div id="kernel-status">Connecting to Kernel...</div>
     </div>
     <div id="sidebar-menu" class="plugin-menu">
@@ -433,9 +561,78 @@
 
     <main id="content-area" class="main-content">
       <div class="header">
-        <h1><span id="agent-name">The Entity</span> — Project Genesis</h1>
-        <div class="subtitle">Sovereign <span class="evolution">Digital</span><span class="soul"> Entity</span> &middot; Core Interface</div>
-        <div class="stats-bar" id="stats-bar"></div>
+        <h1 style="font-size: 33px; letter-spacing: 4.95px;"><span id="agent-name">The Entity</span> — Project Genesis
+        </h1>
+        <div class="subtitle">Sovereign <span
+            style="color: var(--accent); text-shadow: 0 0 10px rgba(124, 111, 240, 0.3);">Digital</span> Entity &middot;
+          Core Interface</div>
+
+        <div class="stats-bar" id="stats-bar">
+          <div class="stat">
+            <div class="num">0</div>
+            <div class="label">Experiences</div>
+          </div>
+          <div class="stat">
+            <div class="num">0</div>
+            <div class="label">Reflections</div>
+          </div>
+          <div class="stat">
+            <div class="num">0</div>
+            <div class="label">Web Searches</div>
+          </div>
+          <div class="stat">
+            <div class="num">0</div>
+            <div class="label">World News</div>
+          </div>
+          <div class="stat">
+            <div class="num">20</div>
+            <div class="label">Core</div>
+          </div>
+          <div class="stat">
+            <div class="num">10</div>
+            <div class="label">Mutable</div>
+          </div>
+        </div>
+
+        <div class="status-row">
+          <div id="cognitive-status" class="mono" style="font-size: 0.8rem; color: var(--accent);">
+            <span class="pulse"></span> <span id="status-text" style="color: var(--text-dim);">Cognitive System
+              Synchronized</span>
+          </div>
+          <div id="clock" class="mono"
+            style="font-size: 18px; color: var(--accent); font-weight: bold; letter-spacing: 0.05em;">00:00:00</div>
+        </div>
+
+        <div class="legend" id="legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--core)"></div>CORE (immutable)
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--mutable)"></div>MUTABLE (evolvable)
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#f0a050"></div>Personality
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#7c6ff0"></div>Philosophy
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#e05050"></div>Boundaries
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#50b8e0"></div>Continuity
+          </div>
+        </div>
+
+        <div class="growth-bar" id="mm-toggle-bar">
+          <div class="growth-label">
+            <span class="icon">🌿</span>
+            <span>Open Soul Mindmap</span>
+            <span style="color: var(--text-dim); font-size: 0.7rem; margin-left: 10px;">interactive canvas - growth
+              animation - zoom & pan</span>
+          </div>
+          <div style="color: var(--growth); font-size: 0.8rem;">→</div>
+        </div>
       </div>
 
       <div id="default-view" class="plugin-view active">
@@ -443,21 +640,40 @@
           <!-- Left Column: Soul Map -->
           <div class="panel-card" id="soul-map-container"
             style="min-height: 600px; padding: 0; position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;">
-              <h2 class="mono" style="font-size: 0.9rem; letter-spacing: 0.1em; color: var(--text-dim);">SOUL MINDMAP
+
+            <!-- List View (Default Legacy Parity) -->
+            <div id="soul-map-list" class="soul-map-list">
+              <h2 class="mono"
+                style="font-size: 0.8rem; letter-spacing: 0.1em; border-bottom: none; margin-bottom: 1.5rem;">SOUL MAP
               </h2>
+              <div id="soul-map-content">
+                <!-- Populated via JS -->
+                <div style="text-align: center; padding: 3rem; color: var(--text-dim);">Reconciling Soul Structure...
+                </div>
+              </div>
             </div>
-            <div id="mindmap-hud"
-              style="position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 0.5rem; background: rgba(12, 12, 22, 0.8); backdrop-filter: blur(8px); padding: 0.4rem 1rem; border-radius: 30px; border: 1px solid var(--border);">
-              <button id="mm-play" class="mono"
-                style="padding: 0.4rem; border: none; background: none; font-size: 0.8rem; color: var(--text-dim);">&blacktriangleright;</button>
-              <button id="mm-reset" class="mono"
-                style="padding: 0.4rem; border: none; background: none; font-size: 0.8rem; color: var(--text-dim);">&olarr;</button>
-              <div style="width: 1px; height: 16px; background: var(--border); margin: 0.4rem 0.2rem;"></div>
-              <button id="mm-fit" class="mono"
-                style="padding: 0.4rem; border: none; background: none; font-size: 0.8rem; color: var(--text-dim);">&boxplus;</button>
+
+            <!-- Canvas View (Hidden by default) -->
+            <div id="soul-map-canvas-container" style="display: none; width: 100%; height: 100%;">
+              <div style="position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;">
+                <h2 class="mono"
+                  style="font-size: 0.9rem; letter-spacing: 0.1em; color: var(--text-dim); border: none;">SOUL MINDMAP
+                </h2>
+              </div>
+              <div id="mindmap-hud"
+                style="position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 0.5rem; background: rgba(12, 12, 22, 0.8); backdrop-filter: blur(8px); padding: 0.4rem 1rem; border-radius: 30px; border: 1px solid var(--border);">
+                <button id="mm-play" class="mono"
+                  style="padding: 0.4rem; border: none; background: none; font-size: 0.8rem; color: var(--text-dim);">&blacktriangleright;</button>
+                <button id="mm-reset" class="mono"
+                  style="padding: 0.4rem; border: none; background: none; font-size: 0.8rem; color: var(--text-dim);">&olarr;</button>
+                <div style="width: 1px; height: 16px; background: var(--border); margin: 0.4rem 0.2rem;"></div>
+                <button id="mm-fit" class="mono"
+                  style="padding: 0.4rem; border: none; background: none; font-size: 0.8rem; color: var(--text-dim);">&boxplus;</button>
+              </div>
+              <canvas id="soul-mindmap-canvas"
+                style="width: 100%; height: 100%; display: block; cursor: grab;"></canvas>
             </div>
-            <canvas id="soul-mindmap-canvas" style="width: 100%; height: 100%; display: block; cursor: grab;"></canvas>
+
             <div id="mm-tooltip"
               style="position: absolute; pointer-events: none; opacity: 0; background: var(--bg-card); border: 1px solid var(--accent); padding: 0.5rem; border-radius: 4px; font-size: 0.7rem; z-index: 100; transition: opacity 0.2s;">
             </div>
@@ -465,7 +681,8 @@
 
           <!-- Center Column: Vitals & Hardware -->
           <div class="right-panel">
-            <div class="panel-card" id="vitals-container" style="min-height: 300px; border-left: 4px solid var(--accent);">
+            <div class="panel-card" id="vitals-container"
+              style="min-height: 300px; border-left: 4px solid var(--accent);">
               <h2>Vitals Dashboard</h2>
               <div id="vitals-content"
                 style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Connecting to
@@ -477,12 +694,15 @@
                 style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Scanning
                 Hardware...</div>
             </div>
-            <div class="panel-card" id="mental-container" style="min-height: 200px; border-left: 4px solid var(--accent);">
+            <div class="panel-card" id="mental-container"
+              style="min-height: 200px; border-left: 4px solid var(--accent);">
               <h2>Mental Activity</h2>
               <div id="mental-content"
-                style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Observing neural flows...</div>
+                style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Observing
+                neural flows...</div>
             </div>
-            <div class="panel-card" id="proposals-container" style="min-height: 200px; border-left: 4px solid var(--growth);">
+            <div class="panel-card" id="proposals-container"
+              style="min-height: 200px; border-left: 4px solid var(--growth);">
               <h2>Pending Proposals</h2>
               <div id="proposals-content"
                 style="color: var(--text-dim); font-size: 0.8rem; text-align: center; padding-top: 2rem;">Loading

@@ -2,7 +2,11 @@
   "id": "identity",
   "name": "Identity & Evolution",
   "version": "1.0.0",
-  "capabilities": ["identity", "evolution", "reflection"],
+  "capabilities": [
+    "identity",
+    "evolution",
+    "reflection"
+  ],
   "api_routes": {
     "GET /v1/plugins/identity/soul": "handle_get_soul",
     "GET /v1/plugins/identity/proposals": "handle_get_proposals",
@@ -16,7 +20,13 @@
     "entry": "view.js"
   },
   "events": {
-    "subscribes": ["TICK_HOURLY", "ENTITY_WAKEUP"],
-    "publishes": ["EVENT_SOUL_UPDATED", "EVENT_REFLECTION_COMPLETE"]
+    "subscribes": [
+      "TICK_HOURLY",
+      "ENTITY_WAKEUP"
+    ],
+    "publishes": [
+      "EVENT_SOUL_UPDATED",
+      "EVENT_REFLECTION_COMPLETE"
+    ]
   }
 }

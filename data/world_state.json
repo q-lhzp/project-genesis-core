@@ -1,6 +1,6 @@
 {
   "sync_to_real_world": true,
-  "last_update": "2026-02-26T00:03:56.732262",
+  "last_update": "2026-03-01T15:00:49.115323",
   "initialized": true,
   "location": {
     "city": "Berlin",
@@ -8,32 +8,13 @@
     "longitude": 13.405,
     "timezone": "Europe/Berlin"
   },
-  "weather": {
-    "temperature": 13.2,
-    "feels_like": 12.8,
-    "condition": "cloudy",
-    "humidity": 81,
-    "wind_speed": 16.1,
-    "pressure": 1002.8754135890167,
-    "visibility": 8000,
-    "uv_index": 3,
-    "last_updated": "2026-03-01T09:00:37.095096"
-  },
-  "lighting": {
-    "sunrise": "07:43",
-    "sunset": "18:16",
-    "daylight_minutes": 633,
-    "is_daytime": true,
-    "golden_hour_morning": false,
-    "golden_hour_evening": false,
-    "moon_phase": "full_moon",
-    "moon_illumination": 5
-  },
+  "weather": "sunny",
+  "lighting": "daylight",
   "atmosphere": {
     "fog_density": 0.0,
-    "cloud_cover": 57,
-    "precipitation_chance": 38,
-    "air_quality_index": 44
+    "cloud_cover": 58,
+    "precipitation_chance": 24,
+    "air_quality_index": 47
   },
   "forecast": {
     "today_high": 20,
@@ -42,5 +23,6 @@
     "tomorrow_low": 10
   },
   "season": "spring",
-  "world_time": "2026-03-01T09:00:37.096339"
+  "world_time": "2026-03-01T11:00:37.552482",
+  "temperature": 18
 }
