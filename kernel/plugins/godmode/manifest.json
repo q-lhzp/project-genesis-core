@@ -1,0 +1,13 @@
+{
+  "id": "godmode",
+  "name": "⚡ God-Mode",
+  "version": "1.0.0",
+  "api_routes": {
+    "POST /v1/plugins/godmode/update-state": "handle_update_state"
+  },
+  "ui": {
+    "tab_id": "godmode",
+    "icon": "⚡",
+    "entry": "view.js"
+  }
+}
