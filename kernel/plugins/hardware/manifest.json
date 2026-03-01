@@ -1,5 +1,5 @@
 {
-  "id": "hardware-engine",
+  "id": "hardware",
   "name": "Hardware Resonance",
   "version": "1.0.0",
   "capabilities": ["monitoring", "system-resonance"],
