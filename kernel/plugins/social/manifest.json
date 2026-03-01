@@ -1,5 +1,5 @@
 {
-  "id": "social-engine",
+  "id": "social",
   "name": "Social Intelligence",
   "version": "1.0.0",
   "capabilities": ["crm", "reputation", "feed"],
