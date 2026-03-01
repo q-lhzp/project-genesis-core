@@ -1,5 +1,5 @@
 {
-  "id": "hobby-engine",
+  "id": "hobby",
   "name": "Hobby & Research",
   "version": "1.0.0",
   "capabilities": ["interests", "research", "browsing"],
