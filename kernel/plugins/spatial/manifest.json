@@ -1,5 +1,5 @@
 {
-  "id": "spatial-engine",
+  "id": "spatial",
   "name": "Spatial & Items",
   "version": "1.0.0",
   "capabilities": ["interior", "inventory", "wardrobe"],
