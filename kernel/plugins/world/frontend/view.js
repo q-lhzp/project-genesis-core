@@ -1,31 +1,48 @@
 /**
- * World Engine Frontend - View Module (v1.0.0)
+ * World Engine Plugin Frontend - View Module (v7.0 Legacy Style)
+ * Matches the look and feel of the project-genesis legacy dashboard.
  */
 
 async function initWorldUI() {
-  const root = document.getElementById('plugin-root-world-engine');
+  const root = document.getElementById('plugin-root-world');
   if (!root) return;
 
   root.innerHTML = `
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
-      <div class="panel-card">
-        <h3>☁️ Current Weather</h3>
-        <div id="world-weather" style="display:grid; gap:1rem;">
-          Loading weather...
-        </div>
-      </div>
+    <style>
+      .world-container { max-width: 800px; margin: 0 auto; padding: 1.5rem 2rem; font-family: 'DM Sans', sans-serif; text-align: center; }
+      .world-card { background: #12121a; border: 1px solid #1e1e30; border-radius: 12px; padding: 2rem; position: relative; overflow: hidden; }
       
-      <div class="panel-card">
-        <h3>☀️ Lighting & Sun</h3>
-        <div id="world-lighting" style="display:grid; gap:1rem;">
-          Loading lighting...
-        </div>
-      </div>
+      .weather-icon { font-size: 4rem; margin-bottom: 1rem; filter: drop-shadow(0 0 15px rgba(124, 111, 240, 0.3)); }
+      .weather-status { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; font-weight: bold; text-transform: uppercase; color: #eeeef4; letter-spacing: 0.1em; }
+      
+      .world-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 2rem; border-top: 1px solid #1e1e30; padding-top: 1.5rem; }
+      .w-stat-box { display: flex; flex-direction: column; gap: 0.3rem; }
+      .w-stat-val { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: #7c6ff0; font-weight: bold; }
+      .w-stat-lab { font-size: 0.65rem; color: #6a6a80; text-transform: uppercase; letter-spacing: 0.05em; }
+      
+      .lighting-badge { display: inline-block; margin-top: 1.5rem; padding: 0.4rem 1rem; border-radius: 20px; background: rgba(124, 111, 240, 0.1); color: #7c6ff0; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; border: 1px solid rgba(124, 111, 240, 0.3); }
+    </style>
 
-      <div class="panel-card" style="grid-column: span 2;">
-        <h3>🌍 Atmosphere & Season</h3>
-        <div id="world-atmosphere" style="display:flex; justify-content:space-around; align-items:center; padding:1rem;">
-          Loading atmosphere...
+    <div class="world-container">
+      <div class="world-card">
+        <div id="world-icon" class="weather-icon">🌤️</div>
+        <div id="world-status" class="weather-status">Synchronizing...</div>
+        
+        <div id="world-lighting" class="lighting-badge">Daylight</div>
+
+        <div class="world-stats">
+          <div class="w-stat-box">
+            <span id="world-season" class="w-stat-val">-</span>
+            <span class="w-stat-lab">Season</span>
+          </div>
+          <div class="w-stat-box">
+            <span id="world-temp" class="w-stat-val">-°C</span>
+            <span class="w-stat-lab">Temperature</span>
+          </div>
+          <div class="w-stat-box">
+            <span id="world-updated" class="w-stat-val">-</span>
+            <span class="w-stat-lab">Last Sync</span>
+          </div>
         </div>
       </div>
     </div>
@@ -35,82 +52,46 @@ async function initWorldUI() {
   setInterval(updateWorldDisplay, 30000);
 }
 
+const WEATHER_ICONS = {
+  sunny: '☀️',
+  cloudy: '☁️',
+  rainy: '🌧️',
+  stormy: '⛈️',
+  snowy: '❄️',
+  clear: '🌙'
+};
+
 async function updateWorldDisplay() {
+  const icon = document.getElementById('world-icon');
+  const status = document.getElementById('world-status');
+  const lighting = document.getElementById('world-lighting');
+  const season = document.getElementById('world-season');
+  const temp = document.getElementById('world-temp');
+  const updated = document.getElementById('world-updated');
+
+  if (!status) return;
+
   try {
     const resp = await fetch('/v1/plugins/world/state');
     const data = await resp.json();
+
+    if (!data.weather) return;
+
+    icon.textContent = WEATHER_ICONS[data.weather] || '🌤️';
+    status.textContent = data.weather;
+    lighting.textContent = data.lighting || 'Daylight';
+    season.textContent = data.season;
+    temp.textContent = (data.temperature || 0) + '°C';
     
-    if (data.success) {
-      const w = data.world.weather;
-      const l = data.world.lighting;
-      const a = data.world.atmosphere;
-
-      // 1. Weather
-      const weatherEl = document.getElementById('world-weather');
-      weatherEl.innerHTML = `
-        <div style="font-size:2.5rem; text-align:center;">${getWeatherEmoji(w.condition)}</div>
-        <div style="text-align:center; font-size:1.2rem; font-weight:bold; text-transform:capitalize;">${w.condition.replace('_', ' ')}</div>
-        <div style="display:flex; justify-content:space-around; margin-top:1rem;">
-          <div>Temp: <strong>${w.temperature}°C</strong></div>
-          <div>Feels: <strong>${w.feels_like}°C</strong></div>
-        </div>
-        <div style="font-size:0.8rem; color:#888; margin-top:0.5rem;">Wind: ${w.wind_speed} km/h | Humidity: ${w.humidity}%</div>
-      `;
-
-      // 2. Lighting
-      const lightingEl = document.getElementById('world-lighting');
-      lightingEl.innerHTML = `
-        <div style="display:flex; justify-content:space-between;">
-          <span>Sunrise: 🌅 ${l.sunrise}</span>
-          <span>Sunset: 🌇 ${l.sunset}</span>
-        </div>
-        <div style="margin-top:1.5rem; text-align:center;">
-          <div style="font-size:1.5rem;">${l.moon_phase.replace('_', ' ')}</div>
-          <div style="font-size:0.8rem; color:#888;">Moon Illumination: ${l.moon_illumination}%</div>
-        </div>
-        <div style="margin-top:1rem; padding:0.5rem; background:${l.is_daytime ? '#7c6ff033' : '#161625'}; border-radius:4px; text-align:center;">
-          ${l.is_daytime ? '☀️ DAYTIME' : '🌙 NIGHTTIME'}
-        </div>
-      `;
-
-      // 3. Atmosphere
-      const atmosphereEl = document.getElementById('world-atmosphere');
-      atmosphereEl.innerHTML = `
-        <div style="text-align:center;">
-          <div style="font-size:0.7rem; color:#888;">SEASON</div>
-          <strong>${data.world.season.toUpperCase()}</strong>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-size:0.7rem; color:#888;">CLOUDS</div>
-          <strong>${a.cloud_cover}%</strong>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-size:0.7rem; color:#888;">RAIN CHANCE</div>
-          <strong>${a.precipitation_chance}%</strong>
-        </div>
-        <div style="text-align:center;">
-          <div style="font-size:0.7rem; color:#888;">AIR QUALITY</div>
-          <strong style="color:${a.air_quality_index < 50 ? '#10b981' : '#f0a050'}">${a.air_quality_index}</strong>
-        </div>
-      `;
+    if (data.last_update) {
+      const time = data.last_update.split('T')[1].split('.')[0];
+      updated.textContent = time;
     }
-  } catch (e) { console.error("World UI Error:", e); }
+
+  } catch (e) {
+    console.error("World Update Error:", e);
+  }
 }
 
-function getWeatherEmoji(condition) {
-  const map = {
-    'clear': '☀️',
-    'partly_cloudy': '⛅',
-    'cloudy': '☁️',
-    'overcast': '🌥️',
-    'rain': '🌧️',
-    'light_rain': '🌦️',
-    'heavy_rain': '⛈️',
-    'snow': '❄️',
-    'fog': '🌫️',
-    'storm': '⚡'
-  };
-  return map[condition] || '🌍';
-}
-
+// Initialize
 setTimeout(initWorldUI, 100);
