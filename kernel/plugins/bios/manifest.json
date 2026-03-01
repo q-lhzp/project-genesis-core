@@ -1,5 +1,5 @@
 {
-  "id": "bios-engine",
+  "id": "bios",
   "name": "Bios Simulation",
   "version": "1.0.0",
   "api_routes": {
