@@ -1,13 +1,10 @@
 {
-  "id": "config-engine",
+  "id": "config",
   "name": "MAC Configuration",
-  "version": "2026.1.0",
+  "version": "1.0.0",
   "api_routes": {
-    "GET /v1/plugins/config/models": "get_available_models",
-    "GET /v1/plugins/config/assignments": "get_role_assignments",
-    "POST /v1/plugins/config/set_role": "set_role_model",
-    "GET /v1/plugins/config/all": "get_all_config",
-    "POST /v1/plugins/config/save": "save_config"
+    "GET /v1/plugins/config/all": "handle_get_all",
+    "POST /v1/plugins/config/save": "handle_save_assignments"
   },
   "ui": {
     "tab_id": "config",
