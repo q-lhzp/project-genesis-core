@@ -200,6 +200,26 @@ async function loadDefaultView() {
         }
     }
 
+    // Load Mental Activity (Logs)
+    const mentalEl = document.getElementById('mental-content');
+    const logsResp = await fetch('/v1/plugins/diagnostic/logs');
+    const logsData = await logsResp.json();
+    if (mentalEl && logsData.logs) {
+        mentalEl.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 0.4rem; padding: 0 0.5rem; text-align: left; font-family: 'JetBrains Mono'; font-size: 0.65rem;">
+                ${logsData.logs.reverse().slice(0, 8).map(line => {
+                    try {
+                        const entry = JSON.parse(line);
+                        const msg = entry.message || entry.event || "Neural pulse detected";
+                        return `<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-dim);">
+                            <span style="color: var(--accent)">●</span> ${msg}
+                        </div>`;
+                    } catch(e) { return ""; }
+                }).join('')}
+            </div>
+        `;
+    }
+
     // Load Proposals (Dashboard)
     const proposalsEl = document.getElementById('proposals-content');
     if (proposalsEl && idProps.pending) {

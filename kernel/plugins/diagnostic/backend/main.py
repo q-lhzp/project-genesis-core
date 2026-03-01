@@ -51,6 +51,19 @@ class DiagnosticPlugin:
 
         return report
 
+    def handle_logs(self, data=None):
+        """API Handler: GET /v1/plugins/diagnostic/logs"""
+        log_path = "kernel.log.jsonl"
+        if not os.path.exists(log_path):
+            return {"error": "Log file not found"}
+        
+        try:
+            with open(log_path, 'r') as f: # SAFE: Diagnostic tool
+                lines = f.readlines()
+                return {"logs": lines[-50:]}
+        except:
+            return {"error": "Failed to read logs"}
+
     def handle_verify(self):
         """API Handler: POST /v1/plugins/diagnostic/verify"""
         # Placeholder for automated data-flow verification

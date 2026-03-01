@@ -5,6 +5,7 @@
     "author": "Antigravity",
     "api_routes": {
         "GET /v1/plugins/diagnostic/health": "handle_health",
+        "GET /v1/plugins/diagnostic/logs": "handle_logs",
         "POST /v1/plugins/diagnostic/verify": "handle_verify"
     },
     "ui": {
