@@ -1,5 +1,5 @@
 {
-  "id": "identity-engine",
+  "id": "identity",
   "name": "Identity & Evolution",
   "version": "1.0.0",
   "capabilities": ["identity", "evolution", "reflection"],
