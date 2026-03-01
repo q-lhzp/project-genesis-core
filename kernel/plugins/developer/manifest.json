@@ -1,5 +1,5 @@
 {
-  "id": "developer-engine",
+  "id": "developer",
   "name": "Self-Expansion Engine",
   "version": "1.0.0",
   "capabilities": ["coding", "system-update", "tool-creation"],
