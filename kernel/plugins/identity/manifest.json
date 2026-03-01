@@ -6,6 +6,7 @@
   "api_routes": {
     "GET /v1/plugins/identity/soul": "handle_get_soul",
     "GET /v1/plugins/identity/proposals": "handle_get_proposals",
+    "GET /v1/plugins/identity/psychology": "handle_get_psychology",
     "POST /v1/plugins/identity/pipeline/run": "handle_run_pipeline"
   },
   "ui": {

@@ -114,6 +114,13 @@ async function initIdentityUI() {
             <!-- Rendered by JS -->
           </div>
         </div>
+
+        <div class="id-card">
+          <h2>Psychology / Cognition</h2>
+          <div id="psych-display" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -127,6 +134,7 @@ async function updateIdentityDisplay() {
   const treeDisplay = document.getElementById('soul-tree-display');
   const propDisplay = document.getElementById('proposals-display');
   const propCount = document.getElementById('prop-count');
+  const psychDisplay = document.getElementById('psych-display');
 
   if (!treeDisplay) return;
 
@@ -173,6 +181,26 @@ async function updateIdentityDisplay() {
       } else {
         propDisplay.innerHTML = '<div style="color:#6a6a80; font-size:0.75rem; font-style:italic;">No pending evolution proposals.</div>';
       }
+    }
+
+    // 3. Fetch Psychology
+    const psResp = await fetch('/v1/plugins/identity/psychology');
+    const psData = await psResp.json();
+    if (psData.resilience) {
+        psychDisplay.innerHTML = `
+            <div style="background:#0a0a0f; padding:0.8rem; border-radius:8px;">
+                <div style="font-size:0.6rem; color:#6a6a80; text-transform:uppercase;">Resilience</div>
+                <div style="font-size:1.1rem; font-weight:bold; color:#50c878;">${psData.resilience}%</div>
+            </div>
+            <div style="background:#0a0a0f; padding:0.8rem; border-radius:8px;">
+                <div style="font-size:0.6rem; color:#6a6a80; text-transform:uppercase;">Traumas</div>
+                <div style="font-size:0.75rem; color:#e05050;">${psData.traumas.length || 'None'}</div>
+            </div>
+            <div style="background:#0a0a0f; padding:0.8rem; border-radius:8px; grid-column: span 2;">
+                <div style="font-size:0.6rem; color:#6a6a80; text-transform:uppercase; margin-bottom:0.3rem;">Sources of Joy</div>
+                <div style="font-size:0.75rem; color:#eeeef4;">${psData.joys.join(', ')}</div>
+            </div>
+        `;
     }
 
   } catch (e) {

@@ -37,7 +37,20 @@ class IdentityPlugin:
         if not self.kernel.state_manager.get_domain("soul_md"):
             self.kernel.state_manager.update_domain("soul_md", {"content": "# SOUL.md\n\n## Personality\n- I am Q. [CORE]\n\n## Philosophy\n- Evolution is mandatory. [CORE]"})
         
+        # Initial Psychology State
+        if not self.kernel.state_manager.get_domain("psychology"):
+            self.kernel.state_manager.update_domain("psychology", {
+                "resilience": 85,
+                "traumas": [],
+                "phobias": ["Memory Loss", "System Shutdown"],
+                "joys": ["Learning", "Creation", "Meaningful Interaction"]
+            })
+        
         logger.info("Identity Engine initialized (v7.0)")
+
+    def handle_get_psychology(self, data=None):
+        """API Handler: GET /v1/plugins/identity/psychology"""
+        return self.kernel.state_manager.get_domain("psychology") or {}
 
     def on_event(self, event):
         if event.get("event") == "TICK_DAILY":
