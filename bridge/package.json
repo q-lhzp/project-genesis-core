@@ -1,5 +1,5 @@
 {
-  "name": "project-genesis-core-bridge",
+  "name": "genesis-os-bridge",
   "version": "0.1.0",
   "type": "module",
   "description": "OpenClaw Bridge for the Genesis Core OS.",

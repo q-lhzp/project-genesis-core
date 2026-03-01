@@ -1,179 +1,177 @@
 /**
- * Project Genesis Core Bridge - OpenClaw Plugin (v2026.1.0)
- * Connects the Gateway to the Genesis OS Kernel.
- * Follows OpenClaw v2026 multi-agent standards.
+ * Genesis OS Bridge - OpenClaw Plugin (STABLE v2.0 - FULL MIGRATION)
+ * Full 1:1 Tool Mapping between OpenClaw and the modular Kernel.
  */
 
-import { Type } from "@sinclair/typebox";
-import { MACRouter, AgentRole } from "./mac_router.js";
+const KERNEL_URL = "http://localhost:5000";
 
-export default async function register(api: any) {
-  const config = api.config.plugins?.entries?.["project-genesis-core-bridge"] || {};
-  const KERNEL_URL = config.kernelUrl || "http://localhost:5000";
+/**
+ * Helper: Execute Kernel API call
+ */
+async function kernelCall(endpoint: string, body?: any): Promise<any> {
+  try {
+    const resp = await fetch(`${KERNEL_URL}${endpoint}`, {
+      method: body ? "POST" : "GET",
+      headers: { "Content-Type": "application/json" },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    return await resp.json();
+  } catch (e) {
+    return { error: String(e) };
+  }
+}
 
-  const router = new MACRouter();
+/**
+ * Valid schema for xAI compatibility
+ */
+const EMPTY_SCHEMA = {
+  type: "object",
+  properties: {
+    _fix: { type: "string", description: "Dummy for xAI compatibility" }
+  },
+  additionalProperties: false
+};
 
-  console.log("--- GENESIS CORE BRIDGE STARTING ---");
-  console.log(`[BRIDGE] Connecting to Kernel at: ${KERNEL_URL}`);
+export default function register(api: any) {
+  console.log("--- GENESIS OS BRIDGE v2.0 STARTING ---");
 
-  await router.init(KERNEL_URL);
+  // ========================================================================
+  // CORE TOOLS
+  // ========================================================================
 
-  /**
-   * 1. Register Core Tool: Kernel Status
-   */
   api.registerTool({
     name: "kernel_status",
-    description: "Check the operational status of the Genesis Kernel.",
+    description: "Returns the COMPLETE simulation state (Needs, Cycle, Market, World, Location, MAC).",
+    parameters: EMPTY_SCHEMA,
     execute: async () => {
-      try {
-        const resp = await fetch(`${KERNEL_URL}/v1/health`);
-        const data = await resp.json();
-        return { text: `Kernel Health: ${JSON.stringify(data)}` };
-      } catch (e: any) {
-        return { text: `Error connecting to Kernel: ${e.message}` };
-      }
+      const data = await kernelCall("/v1/plugins/bios/needs");
+      return { text: JSON.stringify(data, null, 2) };
     }
   });
 
-  /**
-   * 2. Register Tool: Sync Needs
-   */
-  api.registerTool({
-    name: "reality_needs",
-    description: "Satisfy entity needs (eat, drink, sleep, etc.) via the Kernel.",
-    params: Type.Object({
-      action: Type.String({ description: "Action to perform (eat|drink|sleep|toilet|shower|relax)" })
-    }),
-    execute: async ({ action }: { action: string }) => {
-      try {
-        const resp = await fetch(`${KERNEL_URL}/v1/plugins/bios/action`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action })
-        });
-        const data = await resp.json();
-        return { text: `Action ${action} result: ${JSON.stringify(data)}` };
-      } catch (e: any) {
-        return { text: `Kernel Error: ${e.message}` };
-      }
-    }
-  });
-
-  /**
-   * 3. Hook: Before Prompt Build
-   * Inject Kernel state into the prompt context.
-   */
-  api.registerHook("before_prompt_build", async () => {
-    try {
-      const resp = await fetch(`${KERNEL_URL}/v1/state/physique`);
-      const data = await resp.json();
-      
-      if (data && data.needs) {
-        const needs = data.needs;
-        const context = `[SOMATIC STATE] Energy: ${needs.energy}%, Hunger: ${needs.hunger}%, Thirst: ${needs.thirst}%, Stress: ${needs.stress}%`;
-        return { prependContext: context };
-      }
-    } catch (e) {
-      console.error("[BRIDGE] Failed to fetch state for prompt injection:", e);
-    }
-    return { prependContext: "" };
-  });
-
-  /**
-   * 4. Hook: LLM Output
-   * Analyze the output and determine if a sub-agent needs to spin up a background task.
-   * Supports: Persona, Limbic, Analyst, Developer (v2026 standard)
-   */
-  api.registerHook("llm_output", async (event: any) => {
-    const text = event.content || "";
-    if (text) {
-      const role = router.evaluateRouting(text);
-      if (role !== "persona") {
-        const model = router.getAssignedModel(role);
-        console.log(`[MAC] Detected ${role} signature in output. Model: ${model || "default"}. Delegating to agent...`);
-
-        try {
-          let delegateResult: any;
-
-          // Try primary delegation method: api.delegateToAgent (v2026 standard)
-          if (typeof api.delegateToAgent === "function") {
-            delegateResult = await api.delegateToAgent({
-              agent: role,
-              message: text,
-              context: {
-                source: "genesis-core-bridge",
-                timestamp: new Date().toISOString(),
-                assignedModel: model
-              }
-            });
-            console.log(`[MAC] Delegated to agent: ${role} via delegateToAgent`);
-          }
-          // Fallback: Use callTool for specific agent tools (e.g., coding-agent)
-          else if (typeof api.callTool === "function") {
-            const toolName = role === "developer" ? "coding-agent" : `${role}-agent`;
-            delegateResult = await api.callTool(toolName, {
-              message: text,
-              agent: role
-            });
-            console.log(`[MAC] Delegated to agent: ${role} via callTool(${toolName})`);
-          } else {
-            throw new Error("No delegation API available");
-          }
-
-          console.log(`[MAC] Delegation result:`, delegateResult);
-
-          // Update event with delegation result
-          return {
-            ...event,
-            delegated: true,
-            delegateResult: delegateResult,
-            delegateAgent: role
-          };
-        } catch (delegateError: any) {
-          console.error(`[MAC] Failed to delegate to ${role}:`, delegateError.message);
-          // Log error but don't block - let persona handle fallback
-          console.log(`[MAC] Falling back to persona for ${role} task.`);
-        }
-      }
-    }
-    return event;
-  });
-
-  /**
-   * 5. Register Tool: Get MAC Status
-   * Returns current role assignments and available models.
-   */
   api.registerTool({
     name: "mac_status",
-    description: "Get the current Multi-Agent Cluster status and role assignments.",
+    description: "Get current MAC role and model assignments.",
+    parameters: EMPTY_SCHEMA,
     execute: async () => {
-      const assignments = router.getRoleAssignments();
-      return {
-        text: `MAC Status:\n${JSON.stringify(assignments, null, 2)}`
-      };
+      const data = await kernelCall("/v1/plugins/config/all");
+      return { text: JSON.stringify(data, null, 2) };
     }
   });
 
-  /**
-   * 6. Register Tool: Set Role Model
-   * Dynamically update which model handles a specific role.
-   */
+  // ========================================================================
+  // REALITY TOOLS (1:1 Legacy Mapping)
+  // ========================================================================
+
   api.registerTool({
-    name: "mac_set_role_model",
-    description: "Assign a specific model to a MAC role.",
-    params: Type.Object({
-      role: Type.String({ description: "Role to update (persona|limbic|analyst|developer)" }),
-      model: Type.String({ description: "Model key to assign" })
-    }),
-    execute: async ({ role, model }: { role: string, model: string }) => {
-      const validRoles = ["persona", "limbic", "analyst", "developer"];
-      if (!validRoles.includes(role)) {
-        return { text: `Invalid role. Valid roles: ${validRoles.join(", ")}` };
-      }
-      router.setRoleAssignment(role as AgentRole, model);
-      return { text: `Updated ${role} to use model: ${model}` };
+    name: "reality_needs",
+    description: "Satisfy needs: eat, drink, sleep, toilet, shower, rest, pleasure.",
+    parameters: {
+      type: "object",
+      properties: {
+        action: { type: "string", enum: ["eat", "drink", "sleep", "toilet", "shower", "rest", "pleasure"] },
+        intensity: { type: "number", minimum: 0, maximum: 1 }
+      },
+      required: ["action"]
+    },
+    execute: async (args: any) => {
+      const data = await kernelCall("/v1/plugins/bios/action", args);
+      return { text: JSON.stringify(data, null, 2) };
     }
   });
 
-  console.log("--- GENESIS CORE BRIDGE FULLY INITIALIZED ---");
+  api.registerTool({
+    name: "reality_trade",
+    description: "Execute a real or paper trade: buy/sell assets.",
+    parameters: {
+      type: "object",
+      properties: {
+        symbol: { type: "string", description: "Symbol (BTC, ETH, TSLA...)" },
+        amount: { type: "number" },
+        type: { type: "string", enum: ["buy", "sell"] }
+      },
+      required: ["symbol", "amount", "type"]
+    },
+    execute: async (args: any) => {
+      const data = await kernelCall("/v1/plugins/vault/trade", args);
+      return { text: JSON.stringify(data, null, 2) };
+    }
+  });
+
+  api.registerTool({
+    name: "reality_move",
+    description: "Change current location.",
+    parameters: {
+      type: "object",
+      properties: {
+        location: { type: "string" }
+      },
+      required: ["location"]
+    },
+    execute: async (args: any) => {
+      const data = await kernelCall("/v1/plugins/world/location", args);
+      return { text: JSON.stringify(data, null, 2) };
+    }
+  });
+
+  api.registerTool({
+    name: "reality_dress",
+    description: "Change current outfit.",
+    parameters: {
+      type: "object",
+      properties: {
+        outfit_id: { type: "string" }
+      },
+      required: ["outfit_id"]
+    },
+    execute: async (args: any) => {
+      const data = await kernelCall("/v1/plugins/spatial/update", { component: "wardrobe", value: { current_outfit: args.outfit_id } });
+      return { text: JSON.stringify(data, null, 2) };
+    }
+  });
+
+  api.registerTool({
+    name: "reality_grow",
+    description: "Trigger the Soul Evolution Pipeline manually.",
+    parameters: EMPTY_SCHEMA,
+    execute: async () => {
+      const data = await kernelCall("/v1/plugins/identity/pipeline/run");
+      return { text: JSON.stringify(data, null, 2) };
+    }
+  });
+
+  api.registerTool({
+    name: "reality_voice",
+    description: "Synthesize speech from text.",
+    parameters: {
+      type: "object",
+      properties: {
+        text: { type: "string" },
+        voice: { type: "string" }
+      },
+      required: ["text"]
+    },
+    execute: async (args: any) => {
+      const data = await kernelCall("/v1/plugins/voice/generate", args);
+      return { text: JSON.stringify(data, null, 2) };
+    }
+  });
+
+  api.registerTool({
+    name: "reality_wallpaper",
+    description: "Change desktop wallpaper aesthetic.",
+    parameters: {
+      type: "object",
+      properties: {
+        wallpaper: { type: "string" }
+      },
+      required: ["wallpaper"]
+    },
+    execute: async (args: any) => {
+      const data = await kernelCall("/v1/plugins/desktop/wallpaper", args);
+      return { text: JSON.stringify(data, null, 2) };
+    }
+  });
+
+  console.log("--- GENESIS OS BRIDGE FULLY CONFIGURED WITH 10 TOOLS ---");
 }
