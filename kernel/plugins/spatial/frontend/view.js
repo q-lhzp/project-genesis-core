@@ -107,3 +107,27 @@ async function setOutfit(id) {
 // Initialize
 setTimeout(initSpatialUI, 100);
 window.setOutfit = setOutfit;
+
+// Sub-action handling
+window.addEventListener('plugin-tab-switch', (e) => {
+  if (e.detail.pluginId !== 'spatial') return;
+  
+  const action = e.detail.subAction.toLowerCase();
+  let targetHeader = "";
+  
+  if (action === 'interior') targetHeader = "Neural Interior";
+  if (action === 'wardrobe') targetHeader = "Wardrobe";
+  if (action === 'inventory') targetHeader = "Inventory";
+  
+  if (targetHeader) {
+    const headers = document.querySelectorAll('.sp-card h2');
+    for (const h of headers) {
+      if (h.textContent.includes(targetHeader)) {
+        h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        h.parentElement.style.borderColor = "#7c6ff0";
+        setTimeout(() => { h.parentElement.style.borderColor = "#1e1e30"; }, 2000);
+        break;
+      }
+    }
+  }
+});

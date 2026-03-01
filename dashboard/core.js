@@ -239,10 +239,16 @@ async function loadDefaultView() {
   }
 }
 
-function switchTab(id) {
-  // Update Buttons
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.id === id);
+function switchTab(id, subAction) {
+  // Update Buttons (Handle unique buttons even if they point to the same plugin)
+  const buttons = document.querySelectorAll('.tab-btn');
+  buttons.forEach(btn => {
+    // If we have a subAction (like 'interior' for 'spatial'), check if the label matches
+    if (subAction) {
+        btn.classList.toggle('active', btn.textContent.toLowerCase().trim() === subAction.toLowerCase());
+    } else {
+        btn.classList.toggle('active', btn.dataset.id === id);
+    }
   });
 
   // Update Views
@@ -256,6 +262,11 @@ function switchTab(id) {
     localStorage.setItem('activePlugin', id);
     if (target.id === 'default-view') {
       loadDefaultView();
+    }
+    
+    // Optional: notify the plugin of the sub-action
+    if (subAction) {
+        window.dispatchEvent(new CustomEvent('plugin-tab-switch', { detail: { pluginId: id, subAction } }));
     }
   }
 }

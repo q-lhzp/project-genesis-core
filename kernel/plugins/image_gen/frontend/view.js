@@ -44,9 +44,15 @@ async function initImageGenUI() {
                 <option value="grok">xAI Grok (Pro)</option>
               </select>
             </div>
-            <div style="display:flex; align-items:center; gap:0.5rem; margin-top:1rem;">
-              <input type="checkbox" id="gen-face-id" checked>
-              <label for="gen-face-id" style="font-size:0.75rem; color:#eeeef4;">Apply Face-ID (Q Consistency)</label>
+            <div style="display:flex; flex-direction:column; gap:0.5rem; margin-top:0.5rem;">
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <input type="checkbox" id="gen-face-id" checked>
+                <label for="gen-face-id" style="font-size:0.75rem; color:#eeeef4;">Apply Face-ID (Prompt)</label>
+              </div>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <input type="checkbox" id="gen-face-swap">
+                <label for="gen-face-swap" style="font-size:0.75rem; color:#7c6ff0; font-weight:bold;">Apply Physical Face-Swap (AI)</label>
+              </div>
             </div>
             <button id="btn-generate" class="btn-gen" onclick="generateNeuralImage()">Visualize</button>
           </div>
@@ -94,6 +100,7 @@ async function generateNeuralImage() {
   const prompt = document.getElementById('gen-prompt').value;
   const provider = document.getElementById('gen-provider').value;
   const faceId = document.getElementById('gen-face-id').checked;
+  const faceSwap = document.getElementById('gen-face-swap').checked;
   const status = document.getElementById('gen-status');
   const btn = document.getElementById('btn-generate');
 
@@ -105,7 +112,7 @@ async function generateNeuralImage() {
   try {
     const resp = await fetch('/v1/plugins/image_gen/generate', {
       method: 'POST',
-      body: JSON.stringify({ prompt, provider, apply_face_id: faceId })
+      body: JSON.stringify({ prompt, provider, apply_face_id: faceId, apply_face_swap: faceSwap })
     });
     const result = await resp.json();
     

@@ -21,9 +21,11 @@
 - [ ] **Multi-Agent Coding Test:** Erster autonomer Plugin-Erstellungs-Task durch eine Sub-KI.
 
 ## 📋 Backlog (Nächste Schritte)
-1. Implementation of Face-ID protocol in Avatar Engine (Visual Sovereignty).
-2. Persistent State History (AOF Logging).
-3. WebSocket support for live Dashboard updates.
+1. Migration des Image Generator (generate_image.py) als eigenes Plugin.
+2. Migration des Voice Tool (voice_bridge.py) als eigenes Plugin.
+3. Integration des Visual Sovereignty (Face-ID) Protokolls.
+4. Persistent State History (AOF Logging).
+5. WebSocket support for live Dashboard updates.
 
 ---
 *Letztes Update: 27. Februar 2026 - Debugging & Test Systems Live*

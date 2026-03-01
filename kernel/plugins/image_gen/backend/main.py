@@ -17,6 +17,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, Optional
 
+# PIL is required for Face-Swap
+try:
+    from PIL import Image
+except ImportError:
+    # Attempt to install if missing (safe environment)
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "Pillow"])
+    from PIL import Image
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='[IMGGEN] %(message)s')
 logger = logging.getLogger("image_gen")
@@ -92,6 +100,7 @@ class ImageGenPlugin:
         self.kernel = None
         self.bridges = {}
         self.shared_output_dir = "shared/media/generated_images"
+        self.swapper_module = None
 
     def initialize(self, kernel):
         self.kernel = kernel
@@ -105,10 +114,55 @@ class ImageGenPlugin:
             "venice": VeniceBridge(kernel.state_manager),
             "grok": GrokBridge(kernel.state_manager)
         }
+
+        # Initialize Inswapper if available
+        try:
+            # Look for inswapper in sibling of project root
+            inswapper_path = os.path.abspath(os.path.join(base_dir, "..", "inswapper"))
+            if os.path.exists(inswapper_path) and inswapper_path not in sys.path:
+                sys.path.insert(0, inswapper_path)
+                import swapper
+                self.swapper_module = swapper
+                logger.info("Physical Face-Swap (Inswapper) integrated.")
+        except Exception as e:
+            logger.warning(f"Inswapper integration skipped: {e}")
+
         logger.info(f"ImageGen Engine initialized (v7.0)")
 
     def on_event(self, event):
         pass
+
+    def _perform_face_swap(self, target_path: str):
+        """Internal helper to apply physical face swap."""
+        if not self.swapper_module:
+            logger.error("Face-Swap requested but swapper module not loaded.")
+            return False
+
+        try:
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+            source_path = os.path.join(base_dir, DEFAULT_AVATAR_PATH)
+            
+            if not os.path.exists(source_path):
+                logger.error(f"Master avatar not found at {source_path}")
+                return False
+
+            # Model path
+            model_path = "/home/leo/.insightface/models/inswapper_128.onnx"
+            
+            source_img = [Image.open(source_path)] # SAFE: Face-Swap reference
+            target_img = Image.open(target_path) # SAFE: Face-Swap target
+            
+            # Use swapper process
+            # process(source_img: Union[Image.Image, List], target_img: Image.Image, source_indexes, target_indexes, model)
+            result_image = self.swapper_module.process(source_img, target_img, "-1", "-1", model_path)
+            
+            # Save result back to target_path
+            result_image.save(target_path)
+            logger.info(f"Physical Face-Swap applied to {target_path}")
+            return True
+        except Exception as e:
+            logger.error(f"Face-Swap failed: {e}")
+            return False
 
     def handle_generate(self, data):
         prompt = data.get("prompt")
@@ -128,6 +182,10 @@ class ImageGenPlugin:
         success = bridge.generate(prompt, output_path)
         
         if success:
+            # Apply physical Face-Swap if requested
+            if data.get("apply_face_swap"):
+                self._perform_face_swap(output_path)
+
             # Update Gallery state
             gallery = self.kernel.state_manager.get_domain("image_gallery") or []
             new_entry = {
@@ -154,3 +212,4 @@ def initialize(kernel): plugin.initialize(kernel)
 def on_event(event): plugin.on_event(event)
 def handle_generate(data): return plugin.handle_generate(data)
 def handle_get_gallery(data=None): return plugin.handle_get_gallery(data)
+

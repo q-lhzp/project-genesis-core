@@ -250,3 +250,26 @@ async function runPipeline() {
 // Initialize
 setTimeout(initIdentityUI, 100);
 window.runPipeline = runPipeline;
+
+// Sub-action handling
+window.addEventListener('plugin-tab-switch', (e) => {
+  if (e.detail.pluginId !== 'identity') return;
+  
+  const action = e.detail.subAction.toLowerCase();
+  let targetHeader = "";
+  
+  if (action === 'psychology') targetHeader = "Psychology";
+  if (action === 'dream journal') targetHeader = "Dream Journal";
+  
+  if (targetHeader) {
+    const headers = document.querySelectorAll('.id-card h2');
+    for (const h of headers) {
+      if (h.textContent.includes(targetHeader)) {
+        h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        h.parentElement.style.borderColor = "#7c6ff0";
+        setTimeout(() => { h.parentElement.style.borderColor = "#1e1e30"; }, 2000);
+        break;
+      }
+    }
+  }
+});

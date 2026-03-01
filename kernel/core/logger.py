@@ -79,7 +79,7 @@ class KernelLogger:
     _initialized: bool = False
 
     @classmethod
-    def get_logger(cls, name: str = "genesis", log_dir: str = "kernel") -> logging.Logger:
+    def get_logger(cls, name: str = "genesis", log_dir: str = "kernel") -> "KernelLogger":
         """
         Get or create the centralized logger instance.
 
@@ -88,12 +88,24 @@ class KernelLogger:
             log_dir: Directory for log file (relative to project root)
 
         Returns:
-            Configured logger instance
+            KernelLogger instance
         """
-        if cls._instance is not None:
-            return cls._instance
+        if cls._instance is not None and not isinstance(cls._instance, KernelLogger):
+            # Legacy: upgrade from plain logger to KernelLogger wrapper
+            pass
 
-        # Create logger
+        if not hasattr(cls._instance, "_is_kernel_logger") or not cls._instance._is_kernel_logger:
+            # Create wrapper instance
+            wrapper = object.__new__(cls)
+            wrapper._logger = cls._create_logger(name, log_dir)
+            wrapper._is_kernel_logger = True
+            cls._instance = wrapper
+
+        return cls._instance
+
+    @classmethod
+    def _create_logger(cls, name: str, log_dir: str) -> logging.Logger:
+        """Create the underlying Python logger."""
         logger = logging.getLogger(name)
         logger.setLevel(logging.DEBUG)
         logger.propagate = False
@@ -117,14 +129,65 @@ class KernelLogger:
         logger.addHandler(file_handler)
         logger.addHandler(console_handler)
 
-        cls._instance = logger
-        cls._initialized = True
-
         return logger
+
+    def _log(self, level: int, message: str, data: Optional[dict] = None):
+        """Internal log method that handles data payload."""
+        if data:
+            extra = {"data": data}
+            self._logger.log(level, message, extra=extra)
+        else:
+            self._logger.log(level, message)
+
+    def debug(self, message: str, data: Optional[dict] = None):
+        """Log debug message with optional data payload."""
+        self._log(logging.DEBUG, message, data)
+
+    def info(self, message: str, data: Optional[dict] = None):
+        """Log info message with optional data payload."""
+        self._log(logging.INFO, message, data)
+
+    def warning(self, message: str, data: Optional[dict] = None):
+        """Log warning message with optional data payload."""
+        self._log(logging.WARNING, message, data)
+
+    def error(self, message: str, data: Optional[dict] = None):
+        """Log error message with optional data payload."""
+        self._log(logging.ERROR, message, data)
+
+    def critical(self, message: str, data: Optional[dict] = None):
+        """Log critical message with optional data payload."""
+        self._log(logging.CRITICAL, message, data)
+
+    def exception(self, message: str, data: Optional[dict] = None):
+        """Log exception with optional data payload."""
+        if data:
+            extra = {"data": data}
+            self._logger.exception(message, extra=extra)
+        else:
+            self._logger.exception(message)
+
+    # Passthrough properties for backward compatibility
+    @property
+    def level(self):
+        return self._logger.level
+
+    @level.setter
+    def level(self, value):
+        self._logger.level = value
+
+    def setLevel(self, level):
+        self._logger.setLevel(level)
+
+    def addHandler(self, handler):
+        self._logger.addHandler(handler)
+
+    def removeHandler(self, handler):
+        self._logger.removeHandler(handler)
 
 
 # Convenience function for easy importing
-def get_logger(name: str = "genesis") -> logging.Logger:
+def get_logger(name: str = "genesis") -> KernelLogger:
     """Get the kernel logger instance."""
     return KernelLogger.get_logger(name)
 
@@ -133,6 +196,7 @@ def get_logger(name: str = "genesis") -> logging.Logger:
 logger = KernelLogger.get_logger("genesis")
 
 
+# Module-level convenience functions (for direct imports)
 def log(level: int, message: str, data: Optional[dict] = None):
     """
     Log a message with optional data payload.
@@ -142,35 +206,29 @@ def log(level: int, message: str, data: Optional[dict] = None):
         message: Log message
         data: Optional dictionary with additional context data
     """
-    if data:
-        # Use a custom log record with data attribute
-        extra = {"data": data}
-        logger.log(level, message, extra=extra)
-    else:
-        logger.log(level, message)
+    logger._log(level, message, data)
 
 
-# Convenience functions
 def debug(message: str, data: Optional[dict] = None):
     """Log debug message."""
-    log(logging.DEBUG, message, data)
+    logger.debug(message, data)
 
 
 def info(message: str, data: Optional[dict] = None):
     """Log info message."""
-    log(logging.INFO, message, data)
+    logger.info(message, data)
 
 
 def warning(message: str, data: Optional[dict] = None):
     """Log warning message."""
-    log(logging.WARNING, message, data)
+    logger.warning(message, data)
 
 
 def error(message: str, data: Optional[dict] = None):
     """Log error message."""
-    log(logging.ERROR, message, data)
+    logger.error(message, data)
 
 
 def critical(message: str, data: Optional[dict] = None):
     """Log critical message."""
-    log(logging.CRITICAL, message, data)
+    logger.critical(message, data)

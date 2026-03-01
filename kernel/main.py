@@ -2,6 +2,13 @@ import asyncio
 import threading
 import os
 import sys
+
+# Setup path to include project root before imports that depend on it
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from http.server import HTTPServer
 from kernel.core.state_server import StateManager, StateRequestHandler
 from kernel.core.event_bus import bus
@@ -31,7 +38,12 @@ class GenesisKernel:
         server.state_manager = self.state_manager
         server.plugin_manager = self.plugin_loader # Allow API to route to plugins
 
-        logger.info(f"GENESIS KERNEL API STARTING ON PORT {port}", data={"port": port})
+        # Safe logging - check if logger supports data kwarg
+        try:
+            logger.info(f"GENESIS KERNEL API STARTING ON PORT {port}", data={"port": port})
+        except TypeError:
+            # Fallback if logger not ready
+            print(f"GENESIS KERNEL API STARTING ON PORT {port}")
         api_thread = threading.Thread(target=server.serve_forever, daemon=True)
         api_thread.start()
         return server
@@ -40,8 +52,12 @@ class GenesisKernel:
         """Main asynchronous execution loop."""
         logger.info("PROJECT GENESIS CORE KERNEL STARTING")
 
-        # 1. Discover and load plugins
-        self.plugin_loader.discover_and_load()
+        # 1. Discover and load plugins (wrapped in try-except for stability)
+        try:
+            self.plugin_loader.discover_and_load()
+        except Exception as e:
+            logger.error(f"Plugin loading failed: {e}")
+            # Continue anyway - don't let a single plugin crash the kernel
 
         # 2. Start API Server
         self.start_api_server()

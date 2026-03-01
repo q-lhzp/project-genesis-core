@@ -4,7 +4,7 @@
     "Casual Hoodie",
     "Jeans"
   ],
-  "last_tick": "2026-02-27T08:18:42.394450",
+  "last_tick": "2026-03-01T09:46:36.924645",
   "appearance": {
     "hair": "Silver, messy bob cut",
     "eyes": "Electric blue with digital glint",
@@ -14,14 +14,14 @@
     ]
   },
   "needs": {
-    "energy": 0,
-    "hunger": 100,
+    "energy": 32.162059080888824,
+    "hunger": 91.56458032222218,
     "thirst": 100,
     "hygiene": 100,
     "bladder": 100,
     "bowel": 100,
     "stress": 100,
     "arousal": 100,
-    "libido": 94.48885911183334
+    "libido": 99.99499988408333
   }
 }

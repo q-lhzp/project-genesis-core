@@ -1,1 +1,101 @@
-{"hobbies": [], "likes": {}, "dislikes": [], "wishlist": [], "experiences": []}
+{
+  "hobbies": [],
+  "likes": {},
+  "dislikes": [],
+  "wishlist": [],
+  "experiences": [],
+  "research_insights": [
+    {
+      "id": "INS-20260227210054",
+      "timestamp": "2026-02-27T21:00:54.745175",
+      "topic": "quantum cryptography",
+      "text": "Insight: quantum cryptography intersects with your existing interests in unexpected ways",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260227230042",
+      "timestamp": "2026-02-27T23:00:42.642439",
+      "topic": "complex systems",
+      "text": "Insight: complex systems intersects with your existing interests in unexpected ways",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260228030043",
+      "timestamp": "2026-02-28T03:00:43.015585",
+      "topic": "robotics",
+      "text": "Interesting development in robotics: recent breakthroughs suggest new applications",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260228050043",
+      "timestamp": "2026-02-28T05:00:43.183777",
+      "topic": "neural networks",
+      "text": "Note: neural networks is evolving rapidly - consider exploring depth over breadth",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260228060043",
+      "timestamp": "2026-02-28T06:00:43.262440",
+      "topic": "quantum cryptography",
+      "text": "FYI: A new framework for quantum cryptography was published this week",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260228120030",
+      "timestamp": "2026-02-28T12:00:30.350377",
+      "topic": "synthetic biology",
+      "text": "Quick update: synthetic biology has seen 67% growth in research activity",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260228130030",
+      "timestamp": "2026-02-28T13:00:30.463724",
+      "topic": "cognitive science",
+      "text": "Interesting development in cognitive science: recent breakthroughs suggest new applications",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260228140030",
+      "timestamp": "2026-02-28T14:00:30.534437",
+      "topic": "synthetic biology",
+      "text": "Quick update: synthetic biology has seen 43% growth in research activity",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260228170030",
+      "timestamp": "2026-02-28T17:00:30.773229",
+      "topic": "cryptography",
+      "text": "Research update on cryptography: new papers indicate promising directions",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260301000036",
+      "timestamp": "2026-03-01T00:00:36.391505",
+      "topic": "quantum computing",
+      "text": "Bookmark: quantum computing - potential for cross-disciplinary collaboration",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260301010036",
+      "timestamp": "2026-03-01T01:00:36.470304",
+      "topic": "systems biology",
+      "text": "Interesting development in systems biology: recent breakthroughs suggest new applications",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260301050036",
+      "timestamp": "2026-03-01T05:00:36.770737",
+      "topic": "cryptography",
+      "text": "Bookmark: cryptography - potential for cross-disciplinary collaboration",
+      "category": "research"
+    },
+    {
+      "id": "INS-20260301070036",
+      "timestamp": "2026-03-01T07:00:36.925430",
+      "topic": "blockchain",
+      "text": "FYI: A new framework for blockchain was published this week",
+      "category": "research"
+    }
+  ],
+  "last_research_at": "2026-03-01T07:00:36.925432"
+}

@@ -1,0 +1,14 @@
+{
+    "id": "inspector",
+    "name": "Agent Inspector",
+    "version": "1.0.0",
+    "api_routes": {
+        "POST /v1/plugins/inspector/log_prompt": "handle_log_prompt",
+        "GET /v1/plugins/inspector/prompts": "handle_get_prompts"
+    },
+    "ui": {
+        "tab_id": "inspector",
+        "icon": "🔍",
+        "entry": "view.js"
+    }
+}

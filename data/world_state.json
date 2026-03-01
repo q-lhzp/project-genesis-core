@@ -9,31 +9,31 @@
     "timezone": "Europe/Berlin"
   },
   "weather": {
-    "temperature": 13,
-    "feels_like": 13.3,
-    "condition": "clear",
-    "humidity": 48,
-    "wind_speed": 3.3,
-    "pressure": 1004.9730534238404,
-    "visibility": 10000,
-    "uv_index": 8,
-    "last_updated": "2026-02-27T08:18:42.363278"
+    "temperature": 13.2,
+    "feels_like": 12.8,
+    "condition": "cloudy",
+    "humidity": 81,
+    "wind_speed": 16.1,
+    "pressure": 1002.8754135890167,
+    "visibility": 8000,
+    "uv_index": 3,
+    "last_updated": "2026-03-01T09:00:37.095096"
   },
   "lighting": {
-    "sunrise": "07:47",
-    "sunset": "18:12",
-    "daylight_minutes": 625,
+    "sunrise": "07:43",
+    "sunset": "18:16",
+    "daylight_minutes": 633,
     "is_daytime": true,
-    "golden_hour_morning": true,
+    "golden_hour_morning": false,
     "golden_hour_evening": false,
-    "moon_phase": "waxing_gibbous",
-    "moon_illumination": 20
+    "moon_phase": "full_moon",
+    "moon_illumination": 5
   },
   "atmosphere": {
     "fog_density": 0.0,
-    "cloud_cover": 17,
-    "precipitation_chance": 0,
-    "air_quality_index": 33
+    "cloud_cover": 57,
+    "precipitation_chance": 38,
+    "air_quality_index": 44
   },
   "forecast": {
     "today_high": 20,
@@ -41,6 +41,6 @@
     "tomorrow_high": 18,
     "tomorrow_low": 10
   },
-  "season": "winter",
-  "world_time": "2026-02-27T08:18:42.363704"
+  "season": "spring",
+  "world_time": "2026-03-01T09:00:37.096339"
 }
