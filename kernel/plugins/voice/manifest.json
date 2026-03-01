@@ -1,0 +1,21 @@
+{
+  "id": "voice",
+  "name": "Voice Synthesis",
+  "version": "1.0.0",
+  "capabilities": ["text-to-speech", "voice-cloning", "lip-sync"],
+  "api_routes": {
+    "POST /v1/plugins/voice/generate": "handle_generate_speech",
+    "GET /v1/plugins/voice/config": "handle_get_voice_config",
+    "POST /v1/plugins/voice/emotion": "handle_set_emotion",
+    "GET /v1/plugins/voice/voices": "handle_list_voices"
+  },
+  "ui": {
+    "tab_id": "voice",
+    "icon": "🗣️",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": ["EVENT_EMOTION_TRIGGERED"],
+    "publishes": ["EVENT_SPEECH_GENERATED"]
+  }
+}
