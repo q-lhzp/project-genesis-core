@@ -7,6 +7,7 @@
     "GET /v1/plugins/identity/soul": "handle_get_soul",
     "GET /v1/plugins/identity/proposals": "handle_get_proposals",
     "GET /v1/plugins/identity/psychology": "handle_get_psychology",
+    "GET /v1/plugins/identity/dreams": "handle_get_dreams",
     "POST /v1/plugins/identity/pipeline/run": "handle_run_pipeline"
   },
   "ui": {

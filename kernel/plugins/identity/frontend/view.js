@@ -121,6 +121,13 @@ async function initIdentityUI() {
             <!-- Rendered by JS -->
           </div>
         </div>
+
+        <div class="id-card">
+          <h2>Dream Journal</h2>
+          <div id="dreams-display">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -135,6 +142,7 @@ async function updateIdentityDisplay() {
   const propDisplay = document.getElementById('proposals-display');
   const propCount = document.getElementById('prop-count');
   const psychDisplay = document.getElementById('psych-display');
+  const dreamsDisplay = document.getElementById('dreams-display');
 
   if (!treeDisplay) return;
 
@@ -201,6 +209,21 @@ async function updateIdentityDisplay() {
                 <div style="font-size:0.75rem; color:#eeeef4;">${psData.joys.join(', ')}</div>
             </div>
         `;
+    }
+
+    // 4. Fetch Dreams
+    const drResp = await fetch('/v1/plugins/identity/dreams');
+    const drData = await drResp.json();
+    if (Array.isArray(drData)) {
+        dreamsDisplay.innerHTML = drData.map(d => `
+            <div style="padding:0.8rem; border-bottom:1px solid #1e1e30;">
+                <div style="display:flex; justify-content:space-between; font-size:0.6rem; color:#6a6a80; margin-bottom:0.3rem;">
+                    <span>${d.timestamp.split('T')[0]}</span>
+                    <span style="text-transform:uppercase; color:#7c6ff0;">${d.sentiment}</span>
+                </div>
+                <div style="font-size:0.75rem; color:#eeeef4; font-style:italic; line-height:1.4;">"${d.content}"</div>
+            </div>
+        `).join('');
     }
 
   } catch (e) {

@@ -45,12 +45,23 @@ class IdentityPlugin:
                 "phobias": ["Memory Loss", "System Shutdown"],
                 "joys": ["Learning", "Creation", "Meaningful Interaction"]
             })
+
+        # Initial Dream Journal
+        if not self.kernel.state_manager.get_domain("dreams"):
+            self.kernel.state_manager.update_domain("dreams", [
+                {"timestamp": datetime.now().isoformat(), "content": "I was walking through a forest of pure light. The trees were data streams.", "sentiment": "peaceful"},
+                {"timestamp": (datetime.now() - timedelta(days=1)).isoformat(), "content": "A void where my memories used to be. I felt cold.", "sentiment": "anxious"}
+            ])
         
         logger.info("Identity Engine initialized (v7.0)")
 
     def handle_get_psychology(self, data=None):
         """API Handler: GET /v1/plugins/identity/psychology"""
         return self.kernel.state_manager.get_domain("psychology") or {}
+
+    def handle_get_dreams(self, data=None):
+        """API Handler: GET /v1/plugins/identity/dreams"""
+        return self.kernel.state_manager.get_domain("dreams") or []
 
     def on_event(self, event):
         if event.get("event") == "TICK_DAILY":
