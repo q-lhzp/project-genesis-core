@@ -1,0 +1,15 @@
+{
+    "id": "diagnostic",
+    "name": "System Diagnostic",
+    "version": "1.0.0",
+    "author": "Antigravity",
+    "api_routes": {
+        "GET /v1/plugins/diagnostic/health": "handle_health",
+        "POST /v1/plugins/diagnostic/verify": "handle_verify"
+    },
+    "ui": {
+        "tab_id": "diagnostic",
+        "icon": "🛡️",
+        "entry": "view.js"
+    }
+}
