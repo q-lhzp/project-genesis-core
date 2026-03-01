@@ -1,10 +1,11 @@
 {
-  "id": "vault-engine",
-  "name": "The Vault",
+  "id": "vault",
+  "name": "Economy & Vault",
   "version": "1.0.0",
   "api_routes": {
     "GET /v1/plugins/vault/status": "handle_status",
-    "POST /v1/plugins/vault/trade": "handle_trade"
+    "POST /v1/plugins/vault/trade": "handle_trade",
+    "POST /v1/plugins/vault/config": "handle_config"
   },
   "ui": {
     "tab_id": "vault",
@@ -13,6 +14,6 @@
   },
   "events": {
     "subscribes": ["TICK_HOURLY"],
-    "publishes": ["EVENT_TRADE_EXECUTED", "EVENT_ASSET_ALERT"]
+    "publishes": ["EVENT_TRADE_EXECUTED", "EVENT_MARKET_REPORT"]
   }
 }
