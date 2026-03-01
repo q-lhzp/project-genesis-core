@@ -1,0 +1,19 @@
+{
+  "id": "image_gen",
+  "name": "Image Generator",
+  "version": "1.0.0",
+  "capabilities": ["image-generation", "face-id", "visual-sovereignty"],
+  "api_routes": {
+    "POST /v1/plugins/image_gen/generate": "handle_generate_image",
+    "GET /v1/plugins/image_gen/faceid_config": "handle_get_faceid_config"
+  },
+  "ui": {
+    "tab_id": "image-gen",
+    "icon": "🖼️",
+    "entry": "view.js"
+  },
+  "events": {
+    "subscribes": [],
+    "publishes": ["EVENT_IMAGE_GENERATED"]
+  }
+}
